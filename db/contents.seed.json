@@ -1,0 +1,66 @@
+[
+  {
+    "Profile": "mango",
+    "Banner": {
+      "Background": "0`0",
+      "Image": "0`0",
+      "Text": "#avosasoftware Custom Software • Web Design • Web Apps • API's • Data Solutions"
+    },
+    "SectionA": {
+      "Heading": "Our Mission",
+      "Text": "We aim to Develop and commercialize custom software for companies and individuals who wish to modernize processes and digitize financial strategies. We offer intelligent and state of the art solutions for domestic markets based on the users’ expectations and experience.",
+      "ImageKey": "0`0"
+    },
+    "SectionB": {
+      "Heading": "Our Vision",
+      "Text": "Our vision is to be a yardstick on the domestic ICT market. We use best in class manner to create a better every-day life in the South African market that requires constant innovation and upgrades. We aim to sort out those real life everyday problems, we take drastic measures to ensure our clients stay at the top of their game without breaking the bank.",
+      "ImageKey": "0`0"
+    },
+    "Info": {
+      "Heading": "Services",
+      "Text": "Looking to get custom software or a Website for your business or simply want to upgrade your current software? contact us today.",
+      "Blocks": [
+        {
+          "Icon": "fa-code",
+          "Text": "We can create your software exactly the way you want it, you tell us what you need and we'll make sure you get exactly what your hart desires. "
+        },
+        {
+          "Icon": "fa-laptop-code",
+          "Text": " We can assist in giving your current software that much needed makeover or adding that functionality you've wanted for years "
+        }
+      ]
+    }
+  },
+  {
+    "Profile": "wheelo",
+    "Banner": {
+      "Background": "0`0",
+      "Image": "0`0",
+      "Text": "#avosasoftware Custom Software • Web Design • Web Apps • API's • Data Solutions"
+    },
+    "SectionA": {
+      "Heading": "Our Mission",
+      "Text": "We aim to Develop and commercialize custom software for companies and individuals who wish to modernize processes and digitize financial strategies. We offer intelligent and state of the art solutions for domestic markets based on the users’ expectations and experience.",
+      "ImageKey": "0`0"
+    },
+    "SectionB": {
+      "Heading": "Our Vision",
+      "Text": "Our vision is to be a yardstick on the domestic ICT market. We use best in class manner to create a better every-day life in the South African market that requires constant innovation and upgrades. We aim to sort out those real life everyday problems, we take drastic measures to ensure our clients stay at the top of their game without breaking the bank.",
+      "ImageKey": "0`0"
+    },
+    "Info": {
+      "Heading": "Services",
+      "Text": "Looking to get custom software or a Website for your business or simply want to upgrade your current software? contact us today.",
+      "Blocks": [
+        {
+          "Icon": "fa-code",
+          "Text": "We can create your software exactly the way you want it, you tell us what you need and we'll make sure you get exactly what your hart desires. "
+        },
+        {
+          "Icon": "fa-laptop-code",
+          "Text": " We can assist in giving your current software that much needed makeover or adding that functionality you've wanted for years "
+        }
+      ]
+    }
+  }
+]

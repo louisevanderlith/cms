@@ -13,3 +13,12 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+cms
+
+db/*.husk
+!db/*.seed.json
+
+.idea
+.packages
+.dart_tool
