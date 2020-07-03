@@ -1,6 +1,7 @@
 [
   {
     "Profile": "mango",
+    "Language": "en",
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
@@ -33,10 +34,11 @@
   },
   {
     "Profile": "wheelo",
+    "Language": "en",
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Text": "#avosasoftware Custom Software • Web Design • Web Apps • API's • Data Solutions"
+      "Text": "Buy and sell cars"
     },
     "SectionA": {
       "Heading": "Our Mission",

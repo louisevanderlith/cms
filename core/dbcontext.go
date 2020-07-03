@@ -31,7 +31,6 @@ func seed() {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func Shutdown() {

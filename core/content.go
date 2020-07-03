@@ -11,7 +11,7 @@ type Content struct {
 	Info     Information
 }
 
-func (o Content) Valid() (bool, error) {
+func (o Content) Valid() error {
 	return husk.ValidateStruct(&o)
 }
 
