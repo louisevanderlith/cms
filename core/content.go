@@ -15,7 +15,7 @@ func (o Content) Valid() error {
 	return husk.ValidateStruct(&o)
 }
 
-func (o Content) Create() husk.CreateSet {
+func (o Content) Create() (husk.Recorder, error) {
 	defer ctx.Content.Save()
 	return ctx.Content.Create(o)
 }

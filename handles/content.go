@@ -102,9 +102,9 @@ func CreateContent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rec := obj.Create()
+	rec, err := obj.Create()
 
-	if rec.Error != nil {
+	if err != nil {
 		log.Println(err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
