@@ -5,7 +5,8 @@
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Text": "#avosasoftware Custom Software • Web Design • Web Apps • API's • Data Solutions"
+      "Heading": "#avosasoftware",
+      "Subtitle": "Custom Software • Web Design • Web Apps • API's • Data Solutions"
     },
     "SectionA": {
       "Heading": "Our Mission",
@@ -38,7 +39,8 @@
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Text": "Buy and sell cars"
+      "Heading": "Wheelo",
+      "Subtitle": "Buy and sell cars"
     },
     "SectionA": {
       "Heading": "Our Mission",
