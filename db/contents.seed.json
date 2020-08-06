@@ -34,18 +34,19 @@
     }
   },
   {
-    "Profile": "wheelo",
+    "Profile": "320",
     "Language": "en",
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Heading": "Wheelo",
-      "Subtitle": "Buy and sell cars"
+      "Heading": "#avosasoftware",
+      "Subtitle": "Custom Software • Web Design • Web Apps • API's • Data Solutions"
     },
     "SectionA": {
       "Heading": "Our Mission",
       "Text": "We aim to Develop and commercialize custom software for companies and individuals who wish to modernize processes and digitize financial strategies. We offer intelligent and state of the art solutions for domestic markets based on the users’ expectations and experience.",
-      "ImageKey": "0`0"
+      "ImageKey": "0`0",
+      "ImageUrl": "https://picsum.photos/id/48/800/600"
     },
     "SectionB": {
       "Heading": "Our Vision",
@@ -63,17 +64,22 @@
         {
           "Icon": "fa-laptop-code",
           "Text": " We can assist in giving your current software that much needed makeover or adding that functionality you've wanted for years "
+        },
+        {
+          "Icon": "fa-globe",
+          "Text": "We can assist with all types of websites from Info pages to Fully operational Web Apps."
         }
       ]
     }
   },
   {
-    "Profile": "320",
+    "Profile": "wheelo",
     "Language": "en",
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Text": "Buy and sell cars"
+      "Heading": "Wheelo",
+      "Subtitle": "Buy and sell cars"
     },
     "SectionA": {
       "Heading": "Our Mission",

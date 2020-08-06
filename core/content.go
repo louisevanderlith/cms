@@ -12,7 +12,7 @@ type Content struct {
 }
 
 func (o Content) Valid() error {
-	return husk.ValidateStruct(o)
+	return husk.ValidateStruct(&o)
 }
 
 func (o Content) Create() (husk.Recorder, error) {
