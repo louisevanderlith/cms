@@ -34,7 +34,7 @@
     }
   },
   {
-    "Profile": "320",
+    "Profile": "avosa",
     "Language": "en",
     "Banner": {
       "Background": "0`0",
@@ -68,6 +68,45 @@
         {
           "Icon": "fa-globe",
           "Text": "We can assist with all types of websites from Info pages to Fully operational Web Apps."
+        }
+      ]
+    }
+  },
+  {
+    "Profile": "idealcar",
+    "Language": "en",
+    "Banner": {
+      "Background": "0`0",
+      "Image": "0`0",
+      "Heading": "idealcar",
+      "Subtitle": "Search and unleash your dream car - coming soon"
+    },
+    "SectionA": {
+      "Heading": "Searching for a car",
+      "Text": "Our state of the art car portal will be launching soon, we know looking for a new car whether it's brand new or a second hand car can be time consuming and emotional.  We will assist you in finding your new car in the comfort of your own home in a way you can enjoy.  Our portal will allow you to browse cars, bakkies or SUV's in a Social way, why? We believe looking for new wheels should be a pleasure.",
+      "ImageKey": "0`0",
+      "ImageUrl": "https://picsum.photos/id/88/600/300"
+    },
+    "SectionB": {
+      "Heading": "Our Mission",
+      "Text": "To Find, inform and assist people all around South Africa through the power of technology and help them get a set of wheels while giving them the most compelling serch experience possible.",
+      "ImageKey": "0`0"
+    },
+    "Info": {
+      "Heading": "Services",
+      "Text": "We will have dealer listings as well as Private listings",
+      "Blocks": [
+        {
+          "Icon": "fa-car-side",
+          "Text": "All dealer listing will be from registered, verified delaerships"
+        },
+        {
+          "Icon": "fa-people-carry",
+          "Text": " All private listings will undergo a strict registration process to avoid any possible scams"
+        },
+        {
+          "Icon": "fa-hands-helping",
+          "Text": "We will offer support to all registered members or clients, we won't leave you hanging."
         }
       ]
     }
@@ -211,29 +250,35 @@
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Text": "Buy and sell cars"
+      "Heading": "Getproperty",
+      "Subtitle": "Search for your dream home - coming soon"
     },
     "SectionA": {
-      "Heading": "Our Mission",
-      "Text": "We aim to Develop and commercialize custom software for companies and individuals who wish to modernize processes and digitize financial strategies. We offer intelligent and state of the art solutions for domestic markets based on the users’ expectations and experience.",
-      "ImageKey": "0`0"
+      "Heading": "Searching for a home",
+      "Text": "Our state of the art property portal will be launching soon, we know looking for a house to call your home can be time consuming and emotional as it is a big decision.  We will assist you in finding a home in a way you can enjoy.  Our portal will allow you to browse houses, flats, offices & commercial property.",
+      "ImageKey": "0`0",
+      "ImageUrl": "https://picsum.photos/id/378/600/300"
     },
     "SectionB": {
-      "Heading": "Our Vision",
-      "Text": "Our vision is to be a yardstick on the domestic ICT market. We use best in class manner to create a better every-day life in the South African market that requires constant innovation and upgrades. We aim to sort out those real life everyday problems, we take drastic measures to ensure our clients stay at the top of their game without breaking the bank.",
+      "Heading": "Our Mission",
+      "Text": "To Find, inform and assist people all around South Africa through the power of technology and help them get a home, office or workspace while giving them the most compelling serch experience possible.",
       "ImageKey": "0`0"
     },
     "Info": {
       "Heading": "Services",
-      "Text": "Looking to get custom software or a Website for your business or simply want to upgrade your current software? contact us today.",
+      "Text": "We will have agent listings as well as Private listings",
       "Blocks": [
         {
-          "Icon": "fa-code",
-          "Text": "We can create your software exactly the way you want it, you tell us what you need and we'll make sure you get exactly what your hart desires. "
+          "Icon": "fa-home",
+          "Text": "All agent listing will be from registered, verified agents"
         },
         {
-          "Icon": "fa-laptop-code",
-          "Text": " We can assist in giving your current software that much needed makeover or adding that functionality you've wanted for years "
+          "Icon": "fa-house-user",
+          "Text": " All private listings will undergo a strict registration process to avoid any possible scams"
+        },
+        {
+          "Icon": "fa-hands-helping",
+          "Text": "We will offer support to all registered members or clients, we won't leave you hanging."
         }
       ]
     }
@@ -272,17 +317,19 @@
     }
   },
   {
-    "Profile": "husk",
+    "Profile": "huskdb",
     "Language": "en",
     "Banner": {
       "Background": "0`0",
       "Image": "0`0",
-      "Text": "Buy and sell cars"
+      "Heading": "Husk Database",
+      "Subtitle": "Create • Read • Update • Delete • Calculate"
     },
     "SectionA": {
-      "Heading": "Our Mission",
-      "Text": "We aim to Develop and commercialize custom software for companies and individuals who wish to modernize processes and digitize financial strategies. We offer intelligent and state of the art solutions for domestic markets based on the users’ expectations and experience.",
-      "ImageKey": "0`0"
+      "Heading": "What is HuskDB?",
+      "Text": "Husk database is an embedded, object-oriented data store which uses Go to interact with records. It is meant to be used by small webservices which fully control the data it hosts. This engine attempts to force users to keep business logic close to their required objects, and minimizes entry points and chances for loop holes. ie. when a developer accesses or modifies data outside of the intended scope. This includes many sources. Directly modifying data via an external tool. (SQL Server Management Studio, WorkBench, Toad, etc.) Able to access core Database API in higher-level code, rather than the Logic Layer as intended. (Front-end, Public facing API End-points) Editing the data file directly. Creation timestamps sort records internally, and thereafter their traditional ID. The 'Key' is created from the combination of timestamp and id '0`0'. The Key allows the index to sort the records by creation date, by default. This creates faster access to the most recent records and removes need for sorting after every query. The database engine works similar to ISAM, as it stores data on a sequential tape which lives on disk and held in memory. Husk uses an index with pointers to the actual location on the tape for faster access.",
+      "ImageKey": "0`0",
+      "ImageUrl": "https://picsum.photos/id/48/800/600"
     },
     "SectionB": {
       "Heading": "Our Vision",
@@ -290,16 +337,20 @@
       "ImageKey": "0`0"
     },
     "Info": {
-      "Heading": "Services",
-      "Text": "Looking to get custom software or a Website for your business or simply want to upgrade your current software? contact us today.",
+      "Heading": "Why use Husk?",
+      "Text": "Husk is built using GO and the data is imported from a regular JSON file.",
       "Blocks": [
         {
-          "Icon": "fa-code",
-          "Text": "We can create your software exactly the way you want it, you tell us what you need and we'll make sure you get exactly what your hart desires. "
+          "Icon": "fa-database",
+          "Text": " Husk is a embedded, Object oriented database, using GO to interact with data. Ideal for self controlled data."
         },
         {
-          "Icon": "fa-laptop-code",
-          "Text": " We can assist in giving your current software that much needed makeover or adding that functionality you've wanted for years "
+          "Icon": "fa-table",
+          "Text": " Any defined data object type which has the 'Valid()' function, qualifies as a data object, and can be used as a Tabler. "
+        },
+        {
+          "Icon": "fa-plus-square",
+          "Text": " Records can be created by providing an object to the Create function. Husk also supports .CreateMulti which can be used to create many records at once. "
         }
       ]
     }
