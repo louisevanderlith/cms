@@ -2,7 +2,7 @@ package handles
 
 import (
 	"github.com/louisevanderlith/cms/core"
-	"github.com/louisevanderlith/droxolite/context"
+	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
 	"github.com/louisevanderlith/husk"
 	"log"
@@ -10,25 +10,23 @@ import (
 )
 
 func GetContent(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
 	results, err := core.GetAllContent(1, 10)
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Get Content Error", err)
 		http.Error(w, "", http.StatusNotFound)
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(results))
+	err = mix.Write(w, mix.JSON(results))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Serve Error", err)
 	}
 }
 
 func DisplayContent(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	ti := ctx.GetTokenInfo()
+	ti := drx.GetIdentity(r)
 	prf := ti.GetProfile()
 
 	log.Println("CMS:", prf)
@@ -40,16 +38,15 @@ func DisplayContent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(rec.Data()))
+	err = mix.Write(w, mix.JSON(rec.Data()))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Serve Error", err)
 	}
 }
 
 func ViewContent(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	k := ctx.FindParam("key")
+	k := drx.FindParam(r, "key")
 	key, err := husk.ParseKey(k)
 
 	if err != nil {
@@ -66,16 +63,15 @@ func ViewContent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(rec))
+	err = mix.Write(w, mix.JSON(rec))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Serve Error", err)
 	}
 }
 
 func SearchContent(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	page, size := ctx.GetPageData()
+	page, size := drx.GetPageData(r)
 	results, err := core.GetAllContent(page, size)
 
 	if err != nil {
@@ -84,20 +80,19 @@ func SearchContent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(results))
+	err = mix.Write(w, mix.JSON(results))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Serve Error", err)
 	}
 }
 
 func CreateContent(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
 	var obj core.Content
-	err := ctx.Body(&obj)
+	err := drx.JSONBody(r, &obj)
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Bind Error", err)
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
@@ -105,12 +100,12 @@ func CreateContent(w http.ResponseWriter, r *http.Request) {
 	rec, err := obj.Create()
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Create Error", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(rec))
+	err = mix.Write(w, mix.JSON(rec))
 
 	if err != nil {
 		log.Println(err)
@@ -118,17 +113,16 @@ func CreateContent(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateContent(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	key, err := husk.ParseKey(ctx.FindParam("key"))
+	key, err := husk.ParseKey(drx.FindParam(r, "key"))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Parse Error", err)
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
 
 	body := &core.Content{}
-	err = ctx.Body(body)
+	err = drx.JSONBody(r, body)
 
 	if err != nil {
 		log.Println(err)
@@ -144,9 +138,9 @@ func UpdateContent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(nil))
+	err = mix.Write(w, mix.JSON(nil))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Serve Error", err)
 	}
 }
