@@ -9,24 +9,24 @@ import (
 
 func SetupRoutes(scrt, securityUrl, managerUrl string) http.Handler {
 	r := mux.NewRouter()
-
-	cnt := kong.ResourceMiddleware(http.DefaultClient, "cms.content.view", scrt, securityUrl, managerUrl, DisplayContent)
+	ins := kong.NewResourceInspector(http.DefaultClient, securityUrl, managerUrl)
+	cnt := ins.Middleware("cms.content.view", scrt, DisplayContent)
 	r.HandleFunc("/display", cnt).Methods(http.MethodGet)
 
-	get := kong.ResourceMiddleware(http.DefaultClient, "cms.content.search", scrt, securityUrl, managerUrl, GetContent)
+	get := ins.Middleware("cms.content.search", scrt, GetContent)
 	r.HandleFunc("/content", get).Methods(http.MethodGet)
 
-	view := kong.ResourceMiddleware(http.DefaultClient, "cms.content.view", scrt, securityUrl, managerUrl, ViewContent)
+	view := ins.Middleware("cms.content.view", scrt, ViewContent)
 	r.HandleFunc("/content/{key:[0-9]+\\x60[0-9]+}", view).Methods(http.MethodGet)
 
-	srch := kong.ResourceMiddleware(http.DefaultClient, "cms.content.search", scrt, securityUrl, managerUrl, SearchContent)
+	srch := ins.Middleware("cms.content.search", scrt, SearchContent)
 	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}", srch).Methods(http.MethodGet)
 	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", srch).Methods(http.MethodGet)
 
-	create := kong.ResourceMiddleware(http.DefaultClient, "cms.content.create", scrt, securityUrl, managerUrl, CreateContent)
+	create := ins.Middleware("cms.content.create", scrt, CreateContent)
 	r.HandleFunc("/content", create).Methods(http.MethodPost)
 
-	update := kong.ResourceMiddleware(http.DefaultClient, "cms.content.update", scrt, securityUrl, managerUrl, UpdateContent)
+	update := ins.Middleware("cms.content.update", scrt, UpdateContent)
 	r.HandleFunc("/content", update).Methods(http.MethodPut)
 
 	lst, err := kong.Whitelist(http.DefaultClient, securityUrl, "cms.content.view", scrt)
