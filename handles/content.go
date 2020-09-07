@@ -4,7 +4,7 @@ import (
 	"github.com/louisevanderlith/cms/core"
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
-	"github.com/louisevanderlith/husk"
+	"github.com/louisevanderlith/husk/keys"
 	"log"
 	"net/http"
 )
@@ -47,7 +47,7 @@ func DisplayContent(w http.ResponseWriter, r *http.Request) {
 
 func ViewContent(w http.ResponseWriter, r *http.Request) {
 	k := drx.FindParam(r, "key")
-	key, err := husk.ParseKey(k)
+	key, err := keys.ParseKey(k)
 
 	if err != nil {
 		log.Println(err)
@@ -113,7 +113,7 @@ func CreateContent(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateContent(w http.ResponseWriter, r *http.Request) {
-	key, err := husk.ParseKey(drx.FindParam(r, "key"))
+	key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
 	if err != nil {
 		log.Println("Parse Error", err)

@@ -1,6 +1,9 @@
 package core
 
-import "github.com/louisevanderlith/husk"
+import (
+	"github.com/louisevanderlith/husk/hsk"
+	"github.com/louisevanderlith/husk/validation"
+)
 
 type Content struct {
 	Profile  string
@@ -9,35 +12,17 @@ type Content struct {
 	SectionA Section
 	SectionB Section
 	Info     Information
+	Colour   Colour
 }
 
 func (o Content) Valid() error {
-	return husk.ValidateStruct(&o)
+	return validation.Struct(o)
 }
 
-func (o Content) Create() (husk.Recorder, error) {
-	defer ctx.Content.Save()
+func (o Content) Create() (hsk.Key, error) {
 	return ctx.Content.Create(o)
 }
 
-func (o Content) Update(key husk.Key) error {
-	obj, err := ctx.Content.FindByKey(key)
-
-	if err != nil {
-		return err
-	}
-
-	err = obj.Set(o)
-
-	if err != nil {
-		return err
-	}
-
-	err = ctx.Content.Update(obj)
-
-	if err != nil {
-		return err
-	}
-
-	return ctx.Content.Save()
+func (o Content) Update(key hsk.Key) error {
+	return ctx.Content.Update(key, o)
 }

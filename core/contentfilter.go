@@ -1,11 +1,13 @@
 package core
 
-import "github.com/louisevanderlith/husk"
+import (
+	"github.com/louisevanderlith/husk/hsk"
+)
 
 type contentFilter func(obj Content) bool
 
-func (f contentFilter) Filter(obj husk.Dataer) bool {
-	return f(obj.(Content))
+func (f contentFilter) Filter(obj hsk.Record) bool {
+	return f(obj.Data().(Content))
 }
 
 func byProfile(profile string) contentFilter {
