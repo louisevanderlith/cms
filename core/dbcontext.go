@@ -68,7 +68,7 @@ func GetContent(key hsk.Key) (Content, error) {
 		return Content{}, err
 	}
 
-	return rec.Data().(Content), nil
+	return rec.GetValue().(Content), nil
 }
 
 func GetAllContent(page, size int) (records.Page, error) {

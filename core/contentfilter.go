@@ -7,7 +7,7 @@ import (
 type contentFilter func(obj Content) bool
 
 func (f contentFilter) Filter(obj hsk.Record) bool {
-	return f(obj.Data().(Content))
+	return f(obj.GetValue().(Content))
 }
 
 func byProfile(profile string) contentFilter {

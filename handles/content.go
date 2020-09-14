@@ -38,7 +38,7 @@ func DisplayContent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = mix.Write(w, mix.JSON(rec.Data()))
+	err = mix.Write(w, mix.JSON(rec.GetValue()))
 
 	if err != nil {
 		log.Println("Serve Error", err)
