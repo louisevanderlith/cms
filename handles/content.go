@@ -29,7 +29,6 @@ func DisplayContent(w http.ResponseWriter, r *http.Request) {
 	ti := drx.GetIdentity(r)
 	prf := ti.GetProfile()
 
-	log.Println("CMS:", prf)
 	rec, err := core.GetDisplay(prf)
 
 	if err != nil {

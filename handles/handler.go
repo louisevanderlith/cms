@@ -13,6 +13,8 @@ func SetupRoutes(scrt, securityUrl, managerUrl string) http.Handler {
 	cnt := ins.Middleware("cms.content.view", scrt, DisplayContent)
 	r.HandleFunc("/display", cnt).Methods(http.MethodGet)
 
+	r.HandleFunc("/colour/{profile:[a-z]+}", ProfileColour)
+
 	get := ins.Middleware("cms.content.search", scrt, GetContent)
 	r.HandleFunc("/content", get).Methods(http.MethodGet)
 
