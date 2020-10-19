@@ -53,4 +53,9 @@ type RGB struct {
 	Red   int
 	Green int
 	Blue  int
+	Hex   string
+}
+
+func (x RGB) hex() string {
+	return fmt.Sprintf("#%02X%02X%02X", x.Red, x.Green, x.Blue)
 }
