@@ -8,6 +8,10 @@ class Information {
   Information(this.heading, this.text, this.blocks);
 
   Map<String, dynamic> toJson() {
-    return {};
+    return {
+      "Heading": heading,
+      "Text": text,
+      "Blocks": blocks
+    };
   }
 }
