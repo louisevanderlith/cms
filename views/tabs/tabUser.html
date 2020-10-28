@@ -1,0 +1,107 @@
+<div class="content cc">
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtUserName">Name</label>
+            <input class="input" type="text" id="txtUserName" placeholder="Name" required value="{{.Data.User.Name}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="checkbox" for="txtUserVerified">
+                <input class="checkbox" type="checkbox" id="txtUserVerified" placeholder="Verified" required
+                       value="{{.Data.User.Verified}}"/>Verified</label>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtUserEmail">E-mail
+                <input class="input" type="text" id="txtUserEmail" placeholder="Email" required
+                       value="{{.Data.User.Email}}"/>
+                <p class="help is-danger"></p>
+            </label>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="txtUserPassword">Password</label>
+        <div class="control">
+            <input class="password" type="text" id="txtUserPassword" placeholder="Password" required
+                   value="{{.Data.User.Password}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">Contacts</label>
+        <div class="control">
+            {{range $key, $val := .Data.User.Contacts}}
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {{$val.Name}}
+                        </p>
+                        <a class="card-header-icon" aria-label="more options">
+                            <span class="icon">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </header>
+                    <div class="card-content" hidden>
+                        <div class="content">
+                            <div class="field">
+                                <label class="label" for="txtContactsIcon{{$key}}">Icon</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="txtContactsIcon{{$key}}" required
+                                           value="{{$val.Icon}}"/>
+                                    <p class="help is-danger"></p>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="txtContactsName{{$key}}">Text</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="txtContactsName{{$key}}" required
+                                           value="{{$val.Name}}"/>
+                                    <p class="help is-danger"></p>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="txtContactsValue{{$key}}">Text</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="txtContactsValue{{$key}}" required
+                                           value="{{$val.Value}}"/>
+                                    <p class="help is-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" data-id="{{$key}}" class="card-footer-item Delete">Delete</a>
+                        </footer>
+                    </div>
+                </div>
+            {{end}}
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="lstResources">Resources</label>
+        <div class="control">
+            <ul id="lstResources">
+                {{range $_, $val := .Data.User.Resources}}
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox"/>
+                            {{$val}}</label>
+                    </li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtUserRoles">Roles</label>
+            <input class="input" type="text" id="txtUserRoles" placeholder="Roles" required
+                   value="{{.Data.User.Roles}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+</div>
+</form>

@@ -1,0 +1,38 @@
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+<section class="section">
+    <div class="tabs is-boxed is-centered main-menu" id="nav">
+        <ul>
+            <li data-target="paneUserinfo" id="tabUserinfo" class="is-active">
+                <a>
+                    <span class="icon is-small"><i class="fa fa-image"></i></span>
+                    <span>Info</span>
+                </a>
+            </li>
+            <li data-target="paneRole" id="tabRole" class="is-active">
+                <a>
+                    <span class="icon is-small"><i class="fa fa-image"></i></span>
+                    <span>Roles & Permissions</span>
+                </a>
+            </li>
+            <li data-target="paneLoginTrace" id="tabLoginTrace" class="is-active">
+                <a>
+                    <span class="icon is-small"><i class="fa fa-image"></i></span>
+                    <span>Login History</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane is-active" id="paneUserinfo">
+            {{ template "tabUserinfo.html" .}}
+        </div>
+        <div class="tab-pane" id="paneRole">
+            {{ template "tabRole.html" .}}
+        </div>
+        <div class="tab-pane" id="paneLoginTrace">
+            {{ template "tabLoginTrace.html" .}}
+        </div>
+    </div>
+</section>
+{{end}}

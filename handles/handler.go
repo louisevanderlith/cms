@@ -1,56 +1,94 @@
 package handles
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/louisevanderlith/kong/middle"
-	"github.com/rs/cors"
+	"github.com/coreos/go-oidc"
+	"github.com/louisevanderlith/droxolite/drx"
+	"github.com/louisevanderlith/droxolite/menu"
+	"github.com/louisevanderlith/droxolite/open"
+	"github.com/louisevanderlith/theme/api"
+	"golang.org/x/net/context"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-func SetupRoutes(scrt, securityUrl, managerUrl string) http.Handler {
-	r := mux.NewRouter()
-	ins := middle.NewResourceInspector(http.DefaultClient, securityUrl, managerUrl)
-	cnt := ins.Middleware("cms.content.view", scrt, DisplayContent)
-	r.HandleFunc("/display", cnt).Methods(http.MethodGet)
+var (
+	CredConfig *clientcredentials.Config
+	Endpoints map[string]string
+	//FolioURL   string
+)
 
-	r.HandleFunc("/colour/{profile:[a-z]+}", ProfileColour)
+func FullMenu() *menu.Menu {
+	m := menu.NewMenu()
 
-	get := ins.Middleware("cms.content.search", scrt, GetContent)
-	r.HandleFunc("/content", get).Methods(http.MethodGet)
+	m.AddItem(menu.NewItem("a", "/", "Home", nil))
+	//m.AddItem(menu.NewItem("b", "/profiles", "Profiles", nil))
+	//m.AddItem(menu.NewItem("c", "/entities", "Entities", nil))
+	//m.AddItem(menu.NewItem("d", "/resources", "Resources", nil))
+	m.AddItem(menu.NewItem("e", "/content", "Content Management", nil))
 
-	view := ins.Middleware("cms.content.view", scrt, ViewContent)
-	r.HandleFunc("/content/{key:[0-9]+\\x60[0-9]+}", view).Methods(http.MethodGet)
+	return m
+}
 
-	srch := ins.Middleware("cms.content.search", scrt, SearchContent)
-	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}", srch).Methods(http.MethodGet)
-	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", srch).Methods(http.MethodGet)
-
-	create := ins.Middleware("cms.content.create", scrt, CreateContent)
-	r.HandleFunc("/content", create).Methods(http.MethodPost)
-
-	update := ins.Middleware("cms.content.update", scrt, UpdateContent)
-	r.HandleFunc("/content", update).Methods(http.MethodPut)
-
-	lst, err := middle.Whitelist(http.DefaultClient, securityUrl, "cms.content.view", scrt)
+func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]string) http.Handler {
+	ctx := context.Background()
+	provider, err := oidc.NewProvider(ctx, endpoints["issuer"])
 
 	if err != nil {
 		panic(err)
 	}
 
-	corsOpts := cors.New(cors.Options{
-		AllowedOrigins: lst,
-		AllowedMethods: []string{
-			http.MethodGet,
-			http.MethodPost,
-			http.MethodPut,
-			http.MethodOptions,
-			http.MethodHead,
-		},
-		AllowCredentials: true,
-		AllowedHeaders: []string{
-			"*", //or you can your header key values which you are using in your application
-		},
-	})
+	Endpoints = endpoints
 
-	return corsOpts.Handler(r)
+	authConfig := &oauth2.Config{
+		ClientID:     clientId,
+		ClientSecret: clientSecret,
+		Endpoint:     provider.Endpoint(),
+		RedirectURL:  host + "/callback",
+		Scopes:       []string{oidc.ScopeOpenID},
+	}
+
+	CredConfig = &clientcredentials.Config{
+		ClientID:     clientId,
+		ClientSecret: clientSecret,
+		TokenURL:     provider.Endpoint().TokenURL,
+		Scopes:       []string{oidc.ScopeOpenID},
+	}
+
+	err = api.UpdateTemplate(CredConfig.Client(ctx), endpoints["theme"])
+
+	if err != nil {
+		panic(err)
+	}
+
+	tmpl, err := drx.LoadTemplate("./views")
+	if err != nil {
+		panic(err)
+	}
+
+	r := mux.NewRouter()
+
+	distPath := http.FileSystem(http.Dir("dist/"))
+	fs := http.FileServer(distPath)
+	r.PathPrefix("/dist/").Handler(http.StripPrefix("/dist/", fs))
+
+	lock := open.NewUILock(authConfig)
+	r.HandleFunc("/login", lock.Login).Methods(http.MethodGet)
+	r.HandleFunc("/callback", lock.Callback).Methods(http.MethodGet)
+
+	oidcConfig := &oidc.Config{
+		ClientID: clientId,
+	}
+	v := provider.Verifier(oidcConfig)
+
+	r.HandleFunc("/", open.LoginMiddleware(v, Index(tmpl))).Methods(http.MethodGet)
+
+	r.HandleFunc("/content", open.LoginMiddleware(v, GetAllContent(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchContent(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchContent(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/content/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewContent(tmpl))).Methods(http.MethodGet)
+
+	return r
 }

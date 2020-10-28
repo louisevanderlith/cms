@@ -1,0 +1,73 @@
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+    <div class="content">
+        <section class="section">
+            <div class="tabs is-boxed is-centered main-menu" id="nav">
+                <ul>
+                    <li data-target="paneContentProfile" id="tabContentProfile" class="is-active">
+                        <a>
+                            <span class="icon is-small"><i class="fa fa-image"></i></span>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li data-target="paneContentBanner" id="tabContentBanner">
+                        <a>
+                            <span class="icon is-small"><i class="fab fa-empire"></i></span>
+                            <span>Banner</span>
+                        </a>
+                    </li>
+                    <li data-target="paneContentSectionA" id="tabContentSectionA">
+                        <a>
+                            <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                            <span>Section A</span>
+                        </a>
+                    </li>
+                    <li data-target="paneContentSectionB" id="tabContentSectionB">
+                        <a>
+                            <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                            <span>Section B</span>
+                        </a>
+                    </li>
+                    <li data-target="paneContentInfo" id="tabContentInfo">
+                        <a>
+                            <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                            <span>Info</span>
+                        </a>
+                    </li>
+                    <li data-target="paneContentColour" id="tabContentColour">
+                        <a>
+                            <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                            <span>Colour</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <form id="frmContent" role="form">
+                    <div class="control">
+                        <button type="button" class="button is-link is-medium" id="btnSubmit">Save
+                        </button>
+                    </div>
+                    <div class="tab-pane is-active" id="paneContentProfile">
+                        {{ template "tabContentProfile.html" .}}
+                    </div>
+                    <div class="tab-pane" id="paneContentBanner">
+                        {{ template "tabContentBanner.html" .}}
+                    </div>
+                    <div class="tab-pane" id="paneContentSectionA">
+                        {{ template "tabContentSectionA.html" .}}
+                    </div>
+                    <div class="tab-pane" id="paneContentSectionB">
+                        {{ template "tabContentSectionB.html" .}}
+                    </div>
+                    <div class="tab-pane" id="paneContentInfo">
+                        {{ template "tabContentInfo.html" .}}
+                    </div>
+                    <div class="tab-pane" id="paneContentColour">
+                        {{ template "tabContentColour.html" .}}
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+{{end}}

@@ -1,0 +1,53 @@
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+<section class="section">
+    <div class="tabs is-boxed is-centered main-menu" id="nav">
+        <ul>
+            <li data-target="paneBasicSite" id="tabBasicSite" class="is-active">
+                <a>
+                    <span class="icon is-small"><i class="fa fa-image"></i></span>
+                    <span>Info</span>
+                </a>
+            </li>
+            <li data-target="paneContacts" id="tabContacts">
+                <a>
+                    <span class="icon is-small"><i class="fab fa-empire"></i></span>
+                    <span>Contacts</span>
+                </a>
+            </li>
+            <li data-target="paneClients" id="tabClients">
+                <a>
+                    <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                    <span>Clients</span>
+                </a>
+            </li>
+            <li data-target="paneEndpoints" id="tabEndpoints">
+                <a>
+                    <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                    <span>Endpoints</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <form id="frmProfile" role="form">
+            <div class="control">
+                <button type="button" class="button is-link is-medium" id="btnSubmit">Save
+                </button>
+            </div>
+            <div class="tab-pane is-active" id="paneBasicSite">
+                {{ template "tabBasicsite.html" .}}
+            </div>
+            <div class="tab-pane" id="paneContacts">
+                {{ template "tabContacts.html" .}}
+            </div>
+            <div class="tab-pane" id="paneClients">
+                {{ template "tabClients.html" .}}
+            </div>
+            <div class="tab-pane" id="paneEndpoints">
+                {{ template "tabEndpoints.html" .}}
+            </div>
+        </form>
+    </div>
+</section>
+{{end}}

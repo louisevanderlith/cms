@@ -22,3 +22,5 @@ db/*.husk
 .idea
 .packages
 .dart_tool
+
+.DS_Store

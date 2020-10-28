@@ -1,0 +1,42 @@
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+<section class="section">
+    <table class="table is-fullwidth is-hoverable" id="dataTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Display Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Display Name</th>
+                <th>Actions</th>
+            </tr>
+        </tfoot>
+        <tbody>
+            {{range $_, $val := .Data.GetRecords.ToSlice}}
+            {{$v := $val.GetValue}}
+            {{$k := $val.GetKey}}
+            <tr>
+                <td>{{$v.Name}}</td>
+                <td>{{$v.DisplayName}}</td>
+                <td>
+                    <p class="buttons">
+                        <a href="/resources/{{$k}}" class="button is-primary">
+                            <span class="icon is-small">
+                                <i class="far fa-edit"></i>
+                            </span>
+                        </a>
+                    </p>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    {{template "pager.html" .Data}}
+</section>
+{{template "resourcecreate.html" .}}
+{{end}}

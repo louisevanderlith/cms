@@ -1,0 +1,62 @@
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+<section class="section">
+    <div class="tabs is-boxed is-centered main-menu" id="nav">
+        <ul>
+            <li data-target="paneInfo" id="tabInfo" class="is-active">
+                <a>
+                    <span class="icon is-small"><i class="fa fa-image"></i></span>
+                    <span>Info</span>
+                </a>
+            </li>
+            <li data-target="paneUser" id="tabUser">
+                <a>
+                    <span class="icon is-small"><i class="fab fa-empire"></i></span>
+                    <span>User</span>
+                </a>
+            </li>
+            <li data-target="paneAddresses" id="tabAddresses">
+                <a>
+                    <span class="icon is-small"><i class="fab fa-superpowers"></i></span>
+                    <span>Address</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <form id="frmEntity" role="form">
+            <div class="control">
+                <button type="button" class="button is-link is-medium" id="btnSubmit">Save
+                </button>
+            </div>
+            <div class="tab-pane is-active" id="paneInfo">
+                <div class="content">
+                    <div class="field">
+                        <div class="control">
+                            {{ template "tabEntityInfo.html" .}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="paneUser">
+                <div class="content">
+                    <div class="field">
+                        <div class="control">
+                            {{ template "tabUser.html" .}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="paneAddresses">
+                <div class="content">
+                    <div class="field">
+                        <div class="control">
+                            {{ template "tabEntityAddress.html" .}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{{end}}

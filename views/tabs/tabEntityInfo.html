@@ -1,0 +1,28 @@
+<form id="frmEntityInfo" role="form">
+    <hr />
+    <div id="dvEntityInfo" class="content">
+        <div class="field">
+            <div class="control">
+                <label class="label" for="txtUserName">Name</label>
+                <input class="input" type="text" id="txtName" placeholder="Name" required value="{{.Data.Name}}" />
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label" for="txtUserVerified">Profile Key</label>
+                <input class="input" type="text" id="txtProfileKey" placeholder="Verified" required
+                    value="{{.Data.ProfileKey}}" />
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label" for="txtUserEmail">Registration number</label>
+                <input class="input" type="text" id="txtIdentification" placeholder="Email" required
+                    value="{{.Data.Identification}}" />
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+    </div>
+</form>

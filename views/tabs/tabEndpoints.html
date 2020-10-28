@@ -1,0 +1,42 @@
+<button type="button" class="button is-info is-small" id="btnAddEndpoint">Add Endpoint</button>
+<div class="content" id="dvEndpoints">
+    {{range $i, $v := .Data.Profile.Endpoints}}
+    <br />
+    <div class="card">
+        <header class="card-header">
+            <p class="card-header-title">
+                {{$v.Key}}
+            </p>
+            <a class="card-header-icon" aria-label="more options">
+                <span class="icon">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+            </a>
+        </header>
+        <div class="card-content" hidden>
+            <div class="content">
+                <div class="field">
+                    <label class="label">Name:</label>
+                    <div class="control">
+                        <input class="input" id="txtEndpointName{{$i}}" placeholder="Name" type="text" min-length="3"
+                            required value="{{$v.Key}}" />
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Value:</label>
+                    <div class="control">
+                        <input class="input" id="txtEndpointValue{{$i}}" type="text" min-length="3" required
+                            value="{{$v.Value}}" />
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a href="#{{.}}" class="card-footer-item Delete">Delete</a>
+            </footer>
+        </div>
+    </div>
+    {{end}}
+</div>

@@ -1,9 +1,17 @@
-name: mango_cms
-version: 1.0.3
-description: Wrapper for CMS API
-repository: https://github.com/louisevanderlith/cms
-homepage: https://github.com/louisevanderlith/cms
+name: FOLIO.APP
+version: 1.0.0
+description: Profile Management Application
+author: Louise van der Lith
+repository: https://github.com/louisevanderlith/folio
 environment:
-  sdk: '>=2.0.0 < 3.0.0'
+  sdk: '>=2.0.0 <3.0.0'
+dev_dependencies:
+  build_runner: '>=1.6.2 <2.0.0'
+  build_web_compilers:
 dependencies:
   mango_ui: '^1.0.3'
+  dart_toast: '^0.3.0'
+  mango_secure: '^1.0.8'
+  mango_artifact: '^1.0.1'
+  mango_entity: '^1.0.4'
+  mango_cms: '^1.0.3'

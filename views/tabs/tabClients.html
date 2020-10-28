@@ -1,0 +1,82 @@
+<button type="button" class="button is-info is-small" id="btnAddClient">Add Client</button>
+<hr />
+<div id="dvClients" class="content">
+    {{$resrcs := .Data.Resources}}
+    {{range $key, $val := .Data.Profile.Clients}}
+    <div class="card">
+        <header class="card-header">
+            <p class="card-header-title">
+                {{$val.Name}}
+            </p>
+            <a class="card-header-icon" aria-label="more options">
+                <span class="icon">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+            </a>
+        </header>
+        <div class="card-content" hidden>
+            <div class="content">
+                <div class="field">
+                    <div class="control">
+                        <label class="label" for="txtClientName{{$key}}">Name</label>
+                        <input class="input" type="text" min-length="3" id="txtClientName{{$key}}" required
+                            value="{{$val.Name}}" />
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <label class="label" for="txtClientSecret{{$key}}">Secret</label>
+                        <input class="input" type="password" id="txtClientSecret{{$key}}" required
+                            value="{{$val.Secret}}" />
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <label class="label" for="txtClientUrl{{$key}}">Url</label>
+                        <input class="input" type="url" id="txtClientUrl{{$key}}" required value="{{$val.Url}}" />
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <label class="checkbox" for="chkClientTerms{{$key}}">
+                            <input type="checkbox" id="chkClientTerms{{$key}}" required
+                                checked="{{$val.TermsEnabled}}" />
+                            Terms Enabled</label>
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <label class="checkbox" for="chkClientCodes{{$key}}">
+                            <input type="checkbox" id="chkClientCodes{{$key}}" required
+                                checked="{{$val.CodesEnabled}}" />
+                            Codes Enabled</label>
+                        <p class="help is-danger"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <label class="label" for="lstResources{{$key}}">Resources</label>
+                        <ul id="lstResources{{$key}}">
+                            {{range $rsrc, $allow := index $resrcs $val.Name}}
+                            <li>
+                                <label class="checkbox">
+                                    <input type="checkbox" {{if $allow}}checked{{end}} />
+                                    {{$rsrc}}</label>
+                            </li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{end}}
+</div>
