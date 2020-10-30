@@ -1,7 +1,8 @@
 import 'dart:html';
 
-import 'package:FOLIO.APP/bodies/resourceallow.dart';
 import 'package:mango_secure/bodies/client.dart';
+
+import 'resourceallow.dart';
 
 class ClientItem {
   TextInputElement txtName;

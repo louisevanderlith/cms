@@ -1,7 +1,7 @@
 import 'dart:html';
 
 import 'package:mango_artifact/uploadapi.dart';
-import 'package:mango_cms/bodies/section.dart';
+import 'package:mango_folio/bodies/section.dart';
 import 'package:mango_ui/keys.dart';
 
 class ContentSectionForm {

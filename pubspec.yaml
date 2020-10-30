@@ -1,8 +1,8 @@
-name: FOLIO.APP
+name: CMS.APP
 version: 1.0.0
 description: Profile Management Application
 author: Louise van der Lith
-repository: https://github.com/louisevanderlith/folio
+repository: https://github.com/louisevanderlith/cms
 environment:
   sdk: '>=2.0.0 <3.0.0'
 dev_dependencies:
@@ -12,6 +12,6 @@ dependencies:
   mango_ui: '^1.0.3'
   dart_toast: '^0.3.0'
   mango_secure: '^1.0.8'
-  mango_artifact: '^1.0.1'
+  mango_artifact: '^1.0.2'
   mango_entity: '^1.0.4'
-  mango_cms: '^1.0.3'
+  mango_folio: '^1.0.3'

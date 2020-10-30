@@ -38,7 +38,7 @@
             </div>
             <input type="image" id="uplProfileView"
                 class='image {{if eq (print .Data.Profile.ImageKey) "0`0"}} is-hidden {{end}}'
-                src="{{ .Identity.GetResourceURL "artifact" }}/download/{{.Data.Profile.ImageKey}}"
+                src="{{ index .Endpoints "artifact" }}/download/{{.Data.Profile.ImageKey}}"
                 alt="profile image" />
             <p class="help is-danger"></p>
         </div>

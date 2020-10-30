@@ -1,8 +1,8 @@
 import 'dart:html';
 
-import 'package:FOLIO.APP/bodies/blockitem.dart';
-import 'package:mango_cms/bodies/information.dart';
-import 'package:mango_cms/bodies/simpleblock.dart';
+import 'package:CMS.APP/bodies/blockitem.dart';
+import 'package:mango_folio/bodies/information.dart';
+import 'package:mango_folio/bodies/simpleblock.dart';
 
 class ContentInfoForm {
   TextInputElement txtInfoHeader;

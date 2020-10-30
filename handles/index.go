@@ -1,8 +1,8 @@
 package handles
 
 import (
+	"github.com/coreos/go-oidc"
 	"github.com/louisevanderlith/droxolite/mix"
-	"github.com/louisevanderlith/kong/tokens"
 	"html/template"
 	"log"
 	"net/http"
@@ -11,10 +11,25 @@ import (
 func Index(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Index", tmpl, "./views/index.html")
 	pge.AddMenu(FullMenu())
+	pge.AddModifier(mix.EndpointMod(Endpoints))
+	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	return func(w http.ResponseWriter, r *http.Request) {
-		uclaims := r.Context().Value("userclaims")
-		log.Println(uclaims.(tokens.UserIdentity).GetDisplayName())
-		err := mix.Write(w, pge.Create(r, nil))
+		tknVal := r.Context().Value("IDToken")
+		if tknVal == nil {
+			http.Error(w, "", http.StatusUnauthorized)
+			return
+		}
+
+		idToken := tknVal.(*oidc.IDToken)
+		claims := make(map[string]interface{})
+		err := idToken.Claims(&claims)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = mix.Write(w, pge.Create(r, claims))
 
 		if err != nil {
 			log.Println("Serve Error", err)

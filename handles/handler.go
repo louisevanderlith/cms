@@ -16,7 +16,7 @@ import (
 
 var (
 	CredConfig *clientcredentials.Config
-	Endpoints map[string]string
+	Endpoints  map[string]string
 	//FolioURL   string
 )
 
@@ -47,14 +47,14 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 		ClientSecret: clientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  host + "/callback",
-		Scopes:       []string{oidc.ScopeOpenID},
+		Scopes:       []string{oidc.ScopeOpenID, "artifact"},
 	}
 
 	CredConfig = &clientcredentials.Config{
 		ClientID:     clientId,
 		ClientSecret: clientSecret,
 		TokenURL:     provider.Endpoint().TokenURL,
-		Scopes:       []string{oidc.ScopeOpenID},
+		Scopes:       []string{oidc.ScopeOpenID, "theme", "artifact"},
 	}
 
 	err = api.UpdateTemplate(CredConfig.Client(ctx), endpoints["theme"])

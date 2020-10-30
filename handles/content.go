@@ -13,6 +13,8 @@ import (
 func GetAllContent(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Content", tmpl, "./views/content.html")
 	pge.AddMenu(FullMenu())
+	pge.AddModifier(mix.EndpointMod(Endpoints))
+	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	return func(w http.ResponseWriter, r *http.Request) {
 		clnt := CredConfig.Client(r.Context())
 		result, err := api.FetchAllContent(clnt, Endpoints["folio"], "A10")
@@ -34,6 +36,8 @@ func GetAllContent(tmpl *template.Template) http.HandlerFunc {
 func SearchContent(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Content", tmpl, "./views/content.html")
 	pge.AddMenu(FullMenu())
+	pge.AddModifier(mix.EndpointMod(Endpoints))
+	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	return func(w http.ResponseWriter, r *http.Request) {
 		clnt := CredConfig.Client(r.Context())
 		result, err := api.FetchAllContent(clnt, Endpoints["folio"], drx.FindParam(r, "pagesize"))
@@ -55,6 +59,8 @@ func SearchContent(tmpl *template.Template) http.HandlerFunc {
 func ViewContent(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Content View", tmpl, "./views/contentview.html")
 	pge.AddMenu(FullMenu())
+	pge.AddModifier(mix.EndpointMod(Endpoints))
+	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))

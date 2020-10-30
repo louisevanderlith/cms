@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:mango_cms/bodies/colour.dart';
+import 'package:mango_folio/bodies/colour.dart';
 
 class ContentColourForm {
   InputElement colPrimary;

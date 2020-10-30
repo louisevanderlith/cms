@@ -46,7 +46,7 @@
             </div>
             <input type="image" id="uplSectionBView"
                    class='image {{if eq (print .Data.SectionB.ImageKey) "0`0"}} is-hidden {{end}}'
-                   src="{{ .Identity.GetResourceURL "artifact" }}/download/{{.Data.SectionB.ImageKey}}"
+                   src="{{ index .Endpoints "artifact" }}/download/{{.Data.SectionB.ImageKey}}"
                    alt="profile image"/>
             <p class="help is-danger"></p>
         </div>

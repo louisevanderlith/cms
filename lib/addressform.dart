@@ -1,7 +1,8 @@
 import 'dart:html';
 
-import 'package:FOLIO.APP/bodies/addressitem.dart';
 import 'package:mango_entity/bodies/address.dart';
+
+import 'bodies/addressitem.dart';
 
 class AddressesForm {
   void onAddClick(MouseEvent e) {

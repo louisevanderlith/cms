@@ -1,5 +1,5 @@
 <div id="dvContacts" class="content">
-    {{range $key, $val := .Data.Profile.Contacts}}
+    {{range $key, $val := .Data.Contacts}}
         <div class="card">
             <header class="card-header">
                 <p class="card-header-title">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <footer class="card-footer">
-                    <a href="#{{.}}" class="card-footer-item Delete">Delete</a>
+                    <a href="#" class="card-footer-item Delete">Delete</a>
                 </footer>
             </div>
         </div>

@@ -268,14 +268,7 @@ packages:
       name: mango_artifact
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
-  mango_cms:
-    dependency: "direct main"
-    description:
-      name: mango_cms
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
+    version: "1.0.2"
   mango_entity:
     dependency: "direct main"
     description:
@@ -283,6 +276,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  mango_folio:
+    dependency: "direct main"
+    description:
+      name: mango_folio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   mango_secure:
     dependency: "direct main"
     description:

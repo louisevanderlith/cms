@@ -4,14 +4,16 @@
     <table class="table is-fullwidth is-hoverable" id="dataTable">
         <thead>
             <tr>
-                <th>Profile</th>
+                <th>Realm</th>
+                <th>Client</th>
                 <th>Language</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th>Profile</th>
+                <th>Realm</th>
+                <th>Client</th>
                 <th>Language</th>
                 <th>Actions</th>
             </tr>
@@ -21,7 +23,8 @@
             {{$v := $val.GetValue}}
             {{$k := $val.GetKey}}
             <tr>
-                <td>{{$v.Profile}}</td>
+                <td>{{$v.Realm}}</td>
+                <td>{{$v.Client}}</td>
                 <td>{{$v.Language}}</td>
                 <td>
                     <p class="buttons">

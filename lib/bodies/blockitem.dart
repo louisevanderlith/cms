@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:mango_cms/bodies/simpleblock.dart';
+import 'package:mango_folio/bodies/simpleblock.dart';
 
 class BlockItem {
   TextInputElement txtIcon;

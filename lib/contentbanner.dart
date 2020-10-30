@@ -1,7 +1,7 @@
 import 'dart:html';
 
 import 'package:mango_artifact/uploadapi.dart';
-import 'package:mango_cms/bodies/banner.dart';
+import 'package:mango_folio/bodies/banner.dart';
 import 'package:mango_ui/keys.dart';
 
 class ContentBannerForm {

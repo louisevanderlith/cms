@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:mango_secure/bodies/contact.dart';
+import 'package:mango_folio/bodies/contact.dart';
 import 'package:mango_ui/trustvalidator.dart';
 
 import 'bodies/contactitem.dart';
