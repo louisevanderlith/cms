@@ -1,21 +1,25 @@
 {{template "foliopage.html" .}}
 {{define "foliocontent"}}
     <section class="section">
-        <button type="button" class="button" id="btnAdd">Add Client</button>
+        <button type="button" class="button" id="btnAdd">Add Article</button>
         <table class="table is-fullwidth is-hoverable" id="dataTable">
             <thead>
             <tr>
-                <th>Realm</th>
-                <th>Client</th>
-                <th>Language</th>
+                <th>Title</th>
+                <th>Written by</th>
+                <th>Published</th>
+                <th>Created</th>
+                <th>Category</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tfoot>
             <tr>
-                <th>Realm</th>
-                <th>Client</th>
-                <th>Language</th>
+                <th>Title</th>
+                <th>Written by</th>
+                <th>Published</th>
+                <th>Created</th>
+                <th>Category</th>
                 <th>Actions</th>
             </tr>
             </tfoot>
@@ -24,12 +28,14 @@
                 {{$v := $val.GetValue}}
                 {{$k := $val.GetKey}}
                 <tr>
-                    <td>{{$v.Realm}}</td>
-                    <td>{{$v.Client}}</td>
-                    <td>{{$v.Language}}</td>
+                    <td>{{$v.Title}}</td>
+                    <td>{{$v.WrittenBy}}</td>
+                    <td>{{$v.Public}}</td>
+                    <td>{{$k.GetTimestamp}}</td>
+                    <td>{{$v.Category}}</td>
                     <td>
                         <p class="buttons">
-                            <a href="/content/{{$k}}" class="button is-primary">
+                            <a href="/articles/{{$k}}" class="button is-primary">
                             <span class="icon is-small">
                                 <i class="far fa-edit"></i>
                             </span>

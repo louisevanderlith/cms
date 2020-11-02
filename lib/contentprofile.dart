@@ -9,6 +9,8 @@ class ContentProfileForm {
   TextInputElement txtProfileLanguage;
   EmailInputElement txtProfileEmail;
   FileUploadInputElement uplProfileLogo;
+  TextAreaElement txtProfileDescription;
+  TextInputElement txtProfileGTag;
 
   ContentProfileForm() {
     txtProfileRealm = querySelector("#txtProfileRealm");
@@ -16,6 +18,8 @@ class ContentProfileForm {
     txtProfileLanguage = querySelector("#txtProfileLanguage");
     txtProfileEmail = querySelector("#txtProfileEmail");
     uplProfileLogo = querySelector("#uplProfileLogoImg");
+    txtProfileDescription = querySelector("#txtProfileDescription");
+    txtProfileGTag = querySelector("#txtProfileGTag");
 
     uplProfileLogo.onChange.listen(uploadFile);
   }
@@ -38,5 +42,13 @@ class ContentProfileForm {
 
   Key get logo {
     return new Key(uplProfileLogo.dataset['id']);
+  }
+
+  String get description {
+    return txtProfileDescription.value;
+  }
+
+  String get gtag {
+    return txtProfileGTag.value;
   }
 }

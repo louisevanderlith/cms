@@ -1,27 +1,27 @@
 package handles
 
 import (
+	"github.com/louisevanderlith/blog/api"
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
-	"github.com/louisevanderlith/folio/api"
 	"github.com/louisevanderlith/husk/keys"
 	"html/template"
 	"log"
 	"net/http"
 )
 
-func GetAllContent(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Content", tmpl, "./views/content.html")
+func GetArticles(tmpl *template.Template) http.HandlerFunc {
+	pge := mix.PreparePage("Articles", tmpl, "./views/articles.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
 		clnt := CredConfig.Client(r.Context())
-		result, err := api.FetchAllContent(clnt, Endpoints["folio"], "A10")
+		result, err := api.FetchLatestArticles(clnt, Endpoints["blog"], "A10")
 
 		if err != nil {
-			log.Println("Fetch All Content Error", err)
+			log.Println("Fetch Articles Error", err)
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
@@ -34,18 +34,18 @@ func GetAllContent(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func SearchContent(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Content", tmpl, "./views/content.html")
+func SearchArticles(tmpl *template.Template) http.HandlerFunc {
+	pge := mix.PreparePage("Articles", tmpl, "./views/articles.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
 		clnt := CredConfig.Client(r.Context())
-		result, err := api.FetchAllContent(clnt, Endpoints["folio"], drx.FindParam(r, "pagesize"))
+		result, err := api.FetchLatestArticles(clnt, Endpoints["blog"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
-			log.Println("Fetch All Content Error", err)
+			log.Println("Fetch Articles Error", err)
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
@@ -58,14 +58,14 @@ func SearchContent(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func ViewContent(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Content View", tmpl, "./views/contentview.html")
+func ViewArticle(tmpl *template.Template) http.HandlerFunc {
+	pge := mix.PreparePage("Articles View", tmpl, "./views/articlesview.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		clnt := CredConfig.Client(r.Context())
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
 		if err != nil {
@@ -74,11 +74,10 @@ func ViewContent(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		clnt := CredConfig.Client(r.Context())
-		result, err := api.FetchContent(clnt, Endpoints["folio"], key)
+		result, err := api.FetchArticle(clnt, Endpoints["blog"], key)
 
 		if err != nil {
-			log.Println("Fetch Content Error", err)
+			log.Println("Fetch Article Error", err)
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}

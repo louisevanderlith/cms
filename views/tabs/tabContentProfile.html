@@ -58,4 +58,20 @@
             <p class="help is-danger"></p>
         </div>
     </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtProfileDescription">Description</label>
+            <textarea class="textarea" id="txtProfileDescription" placeholder="Client Description"
+                      required>{{.Data.Description}}</textarea>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtProfileGTag">Google Tag</label>
+            <input class="input" type="text" id="txtProfileGTag" placeholder="Language" required
+                   value="{{.Data.GTag}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
 </div>

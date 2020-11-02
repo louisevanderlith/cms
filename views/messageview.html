@@ -1,0 +1,71 @@
+{{template "adminpage.html" .}}
+{{define "admincontent"}}
+    <form id="frmBasicSite" role="form" data-toggle="validator">
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtTitle">Title</label>
+                <input class="form-control" type="text" id="txtTitle" placeholder="Title" required
+                       value="{{.Data.Title}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtDescription">Description</label>
+                <textarea class="form-control" id="txtDescription" placeholder="Description" required
+                          cols="40" rows="5">{{.Data.Description}}</textarea>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtEmail">Email Address</label>
+                <input class="form-control" type="email" id="txtEmail" required
+                       value="{{.Data.ContactEmail}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtPhone">Contact Number</label>
+                <input class="form-control" type="tel" id="txtPhone" minlength="9" maxlength="10" required
+                       value="{{.Data.ContactPhone}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtURL">URL</label>
+                <input class="form-control" type="url" id="txtURL" required
+                       value="{{.Data.URL}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="uplImage">Logo</label>
+                <div id="imageHolder">
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label for="uplProfileImg">Icon</label>
+                            <input class="form-control" type="file" multiple="false" data-for="logo"
+                                   data-name="Profile" data-id="{{.Data.ImageKey}}"
+                                   accept=".jpg, .jpeg, .png" id="uplProfileImg"
+                                   placeholder="Profile Image" {{if not .Data.ImageKey}}
+                                required {{end}}
+                            />
+                            <input {{if not .Data.ImageKey}} hidden {{end}} type="image" id="uplProfileView"
+                                                                            class="img-thumbnail"
+                                                                            src="{{ index .Endpoints "artifact" }}/download/{{.Data.ImageKey}}"
+                                                                            alt="profile image"/>
+                            <p class="with-errors text-danger"></p>
+                        </div>
+                    </div>
+                </div>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+    </form>
+    <a class="btn btn-secondary" href="/site">Back</a>
+    </div>
+{{end}}

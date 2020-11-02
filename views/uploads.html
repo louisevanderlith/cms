@@ -1,40 +1,40 @@
-{{template "foliopage.html" .}}
-{{define "foliocontent"}}
+{{template "adminpage.html" .}}
+{{define "admincontent"}}
     <section class="section">
-        <button type="button" class="button" id="btnAdd">Add Client</button>
         <table class="table is-fullwidth is-hoverable" id="dataTable">
             <thead>
             <tr>
-                <th>Realm</th>
-                <th>Client</th>
-                <th>Language</th>
+                <th>Item Name</th>
+                <th>Name</th>
+                <th>MimeType</th>
+                <th>Size</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tfoot>
             <tr>
-                <th>Realm</th>
-                <th>Client</th>
-                <th>Language</th>
+                <th>Item Name</th>
+                <th>Name</th>
+                <th>MimeType</th>
+                <th>Size</th>
                 <th>Actions</th>
             </tr>
             </tfoot>
             <tbody>
-            {{range $_, $val := .Data.GetRecords.ToSlice}}
-                {{$v := $val.GetValue}}
-                {{$k := $val.GetKey}}
+            {{range $key, $val := .Data.Records}}
                 <tr>
-                    <td>{{$v.Realm}}</td>
-                    <td>{{$v.Client}}</td>
-                    <td>{{$v.Language}}</td>
+                    <td>{{$val.V.ItemName}}</td>
+                    <td>{{$val.V.Name}}</td>
+                    <td>{{$val.V.MimeType}}</td>
+                    <td>{{$val.V.Size}}</td>
                     <td>
                         <p class="buttons">
-                            <a href="/content/{{$k}}" class="button is-primary">
+                            <a href="/artifact/uploads/{{$val.K}}" class="button is-primary">
                             <span class="icon is-small">
-                                <i class="far fa-edit"></i>
+                                <i class="fas fa-file-alt"></i>
                             </span>
                             </a>
-                            <button data-key="{{$k}}" class="button is-danger deleter">
+                            <button data-key="{{$val.K}}" class="button is-danger deleter">
                             <span class="icon is-small">
                                 <i class="fas fa-ban"></i>
                             </span>

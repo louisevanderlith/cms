@@ -55,7 +55,9 @@ class ContentForm extends FormState {
           sectionBForm.toDTO(),
           infoForm.toDTO(),
           colourForm.toDTO(),
-          contactsForm.items);
+          contactsForm.items,
+          profileForm.description,
+          profileForm.gtag);
 
       HttpRequest req;
       if (objKey.toJson() != "0`0") {

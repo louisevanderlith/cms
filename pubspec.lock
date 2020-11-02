@@ -269,6 +269,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  mango_blog:
+    dependency: "direct main"
+    description:
+      name: mango_blog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   mango_entity:
     dependency: "direct main"
     description:
@@ -282,7 +289,7 @@ packages:
       name: mango_folio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.5"
   mango_secure:
     dependency: "direct main"
     description:
