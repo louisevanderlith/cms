@@ -21,7 +21,7 @@
             </div>
             <input type="image" id="uplBannerBackgroundView"
                    class='image {{if eq (print .Data.Banner.Background) "0`0"}} is-hidden {{end}}'
-                   src="{{ index .Endpoints "artifact" }}/download/{{print .Data.Banner.Background}}"
+                   src="{{ index .Endpoints "artifact" }}/download/{{.Data.Banner.Background}}"
                    alt="profile image"/>
             <p class="help is-danger"></p>
         </div>

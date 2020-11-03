@@ -16,13 +16,15 @@ func main() {
 	theme := flag.String("theme", "http://127.0.0.1:8093", "Theme URL")
 	folio := flag.String("folio", "http://127.0.0.1:8090", "Folio URL")
 	artifact := flag.String("artifact", "http://127.0.0.1:8082", "Artifact URL")
+	blog := flag.String("blog", "http://127.0.0.1:8102", "Blog URL")
 	flag.Parse()
 
 	ends := map[string]string{
-		"issuer": *issuer,
-		"theme":  *theme,
-		"folio":  *folio,
+		"issuer":   *issuer,
+		"theme":    *theme,
+		"folio":    *folio,
 		"artifact": *artifact,
+		"blog":     *blog,
 	}
 
 	srvr := &http.Server{

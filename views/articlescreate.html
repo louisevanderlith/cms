@@ -1,0 +1,134 @@
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+    <form id="frmBlogCreate" role="form">
+        <div class="field">
+            <div class="control">
+                <label class="checkbox" for="chkPublic">
+                    <input type="checkbox" id="chkPublic"/>
+                    Published</label>
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label" for="txtTitle">Title</label>
+                <input class="input" type="text" id="txtTitle" placeholder="Title" required/>
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label" for="txtIntro">Introduction</label>
+                <input class="input" type="text" id="txtIntro" placeholder="Intro" required/>
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label" for="cboCategories">Categories</label>
+                <select class="select" id="cboCategories">
+                    <option value="Default">Default</option>
+                    <option value="Motoring">Motoring</option>
+                    <option value="Technology">Technology
+                    </option>
+                </select>
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <label class="label" for="uplHeaderImg">Blog Image</label>
+                <div class="file">
+                    <label class="file-label">
+                        <input class="file-input" type="file" multiple="false" data-for="banner" data-name="Blog"
+                               data-id="" accept=".jpg, .jpeg, .png" id="uplHeaderImg" placeholder="Blog Image"
+                               required/>
+                        <p class="help is-danger"></p>
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                Choose a file…
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <input type="image" id="uplHeaderView" class="image is-hidden" src="" alt="blog head image"/>
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label" for="txtContent">Content</label>
+                <div id="editCtrls" class="buttons is-centered has-addons">
+                    <span class="button" data-role="undo">
+                        <i class="icon is-small fas fa-undo"></i>
+                    </span>
+                    <span class="button" data-role="redo">
+                        <i class="icon is-small fas fa-redo"></i>
+                    </span>
+                    <span class="button" data-role="bold">
+                        <i class="icon is-small fa fa-bold"></i>
+                    </span>
+                    <span class="button" data-role="italic">
+                        <i class="icon is-small fa fa-italic"></i>
+                    </span>
+                    <span class="button" data-role="underline">
+                        <i class="icon is-small fa fa-underline"></i>
+                    </span>
+                    <span class="button" data-role="strikeThrough">
+                        <i class="icon is-small fa fa-strikethrough"></i>
+                    </span>
+                    <span class="button" data-role="justifyLeft">
+                        <i class="icon is-small fa fa-align-left"></i>
+                    </span>
+                    <span class="button" data-role="justifyCenter">
+                        <i class="icon is-small fa fa-align-center"></i>
+                    </span>
+                    <span class="button" data-role="justifyRight">
+                        <i class="icon is-small fa fa-align-right"></i>
+                    </span>
+                    <span class="button" data-role="justifyFull">
+                        <i class="icon is-small fa fa-align-justify"></i>
+                    </span>
+                    <span class="button" data-role="indent">
+                        <i class="icon is-small fa fa-indent"></i>
+                    </span>
+                    <span class="button" data-role="outdent">
+                        <i class="icon is-small fa fa-outdent"></i>
+                    </span>
+                    <span class="button" data-role="insertOrderedList">
+                        <i class="icon is-small fa fa-list-ol"></i>
+                    </span>
+                    <span class="button" data-role="insertOrderedList">
+                        <i class="icon is-small fa fa-list-ul"></i>
+                    </span>
+                    <span class="button" data-role="h1">
+                        <b>h<sup>1</sup></b>
+                    </span>
+                    <span class="button" data-role="h2">
+                        <b>h<sup>2</sup></b>
+                    </span>
+                    <span class="button" data-role="h3">
+                        <b>h<sup>3</sup></b>
+                    </span>
+                    <span class="button" data-role="p">
+                        <b>p</b>
+                    </span>
+                    <span class="button" data-role="subscript">
+                        <i class="icon is-small fa fa-subscript"></i>
+                    </span>
+                    <span class="button" data-role="superscript">
+                        <i class="icon is-small fa fa-superscript"></i>
+                    </span>
+                </div>
+                <div id="txtContent" class="content textarea" contenteditable>
+
+                </div>
+                <p class="help is-danger"></p>
+            </div>
+        </div>
+    </form>
+{{end}}

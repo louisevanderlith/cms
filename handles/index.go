@@ -13,6 +13,7 @@ func Index(tmpl *template.Template) http.HandlerFunc {
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
 		tknVal := r.Context().Value("IDToken")
 		if tknVal == nil {
