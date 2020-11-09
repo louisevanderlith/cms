@@ -136,6 +136,8 @@ github.com/louisevanderlith/droxolite v1.16.5 h1:yjlAZLVfr32AhnRdxOL26dOrv79baUI
 github.com/louisevanderlith/droxolite v1.16.5/go.mod h1:MMSJBpV2/1W4IXkR4kX9MPVD7cnzHelwnRILM7Vmjb8=
 github.com/louisevanderlith/droxolite v1.16.7 h1:v7qrns8kHmy2CVyOjPFMEX6HLSO7SM3F8A1kDhVuvK4=
 github.com/louisevanderlith/droxolite v1.16.7/go.mod h1:Qc1b6TuO10svdFXsk5Tggo7eNI+gcGa9VjcKedKIFNU=
+github.com/louisevanderlith/droxolite v1.16.8 h1:XVc82b/Bt/kbu3R8coizfuVnAByR2ErYLpeXfhMrPCU=
+github.com/louisevanderlith/droxolite v1.16.8/go.mod h1:Qc1b6TuO10svdFXsk5Tggo7eNI+gcGa9VjcKedKIFNU=
 github.com/louisevanderlith/folio v1.0.9 h1:Vl7cqD9HIBTQahWvYN/DJH5p3d/39rZEQ7Dfp7of+0s=
 github.com/louisevanderlith/folio v1.0.9/go.mod h1:H1FXBO3YUvn2PSGtxn+7ukzLgovAFSDR84ICprWRM0c=
 github.com/louisevanderlith/game v1.0.0 h1:kN0plYL/g0cfGf2OHXlu8FDfRckLAfDa7su7Bowcijs=

@@ -19,14 +19,16 @@
             </tr>
             </tfoot>
             <tbody>
-            {{range $_, $val := .Data.Records}}
+            {{range .Data.GetRecords.ToSlice}}
+                {{$v := .GetValue}}
+                {{$k := .GetKey}}
                 <tr>
-                    <td>{{$val.V.Name}}</td>
-                    <td>{{$val.V.Email}}</td>
-                    <td>{{$val.V.Sent}}</td>
+                    <td>{{$v.Name}}</td>
+                    <td>{{$v.Email}}</td>
+                    <td>{{$v.Sent}}</td>
                     <td>
                         <p class="buttons">
-                            <a href="/comms/messages/{{$val.K}}" class="button is-primary">
+                            <a href="/comms/{{$k}}" class="button is-primary">
                             <span class="icon is-small">
                                 <i class="far fa-edit"></i>
                             </span>

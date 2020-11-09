@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:dart_toast/dart_toast.dart';
 import 'package:mango_artifact/uploadapi.dart';
 import 'package:mango_blog/blogapi.dart';
 import 'package:mango_blog/bodies/article.dart';
@@ -88,20 +89,31 @@ class ArticleForm extends FormState {
       HttpRequest req;
       if (_objKey.toJson() != "0`0") {
         req = await updateArticle(_objKey, obj);
+
+        if (req.status == 200) {
+          new Toast.success(
+              title: "Success!",
+              message: req.response,
+              position: ToastPos.bottomLeft);
+        } else {
+          new Toast.error(
+              title: "Error!",
+              message: req.response,
+              position: ToastPos.bottomLeft);
+        }
       } else {
         req = await createArticle(obj);
-      }
 
-      var result = jsonDecode(req.response);
-
-      if (req.status == 200) {
-        final data = result['Data'];
-        final rec = data['Record'];
-
-        if (rec != null) {
-          final key = rec['K'];
+        if (req.status == 200) {
+          var result = jsonDecode(req.response);
+          final key = new Key(result);
 
           _objKey = key;
+        } else {
+          new Toast.error(
+              title: "Error!",
+              message: req.response,
+              position: ToastPos.bottomLeft);
         }
       }
     }

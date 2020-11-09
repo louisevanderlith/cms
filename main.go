@@ -17,6 +17,8 @@ func main() {
 	folio := flag.String("folio", "http://127.0.0.1:8090", "Folio URL")
 	artifact := flag.String("artifact", "http://127.0.0.1:8082", "Artifact URL")
 	blog := flag.String("blog", "http://127.0.0.1:8102", "Blog URL")
+	comms := flag.String("comms", "http://127.0.0.1:8085", "Comms URL")
+	comment := flag.String("comment", "http://127.0.0.1:8084", "Comment URL")
 	flag.Parse()
 
 	ends := map[string]string{
@@ -25,6 +27,8 @@ func main() {
 		"folio":    *folio,
 		"artifact": *artifact,
 		"blog":     *blog,
+		"comms":    *comms,
+		"comment":  *comment,
 	}
 
 	srvr := &http.Server{

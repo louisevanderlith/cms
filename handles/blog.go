@@ -1,6 +1,7 @@
 package handles
 
 import (
+	"fmt"
 	"github.com/louisevanderlith/blog/api"
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
@@ -13,6 +14,7 @@ import (
 func GetArticles(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Articles", tmpl, "./views/articles.html")
 	pge.AddMenu(FullMenu())
+	pge.ChangeTitle("Articles")
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
@@ -37,6 +39,7 @@ func GetArticles(tmpl *template.Template) http.HandlerFunc {
 func SearchArticles(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Articles", tmpl, "./views/articles.html")
 	pge.AddMenu(FullMenu())
+	pge.ChangeTitle("Articles")
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
@@ -59,7 +62,7 @@ func SearchArticles(tmpl *template.Template) http.HandlerFunc {
 }
 
 func ViewArticle(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Articles View", tmpl, "./views/articlesview.html")
+	pge := mix.PreparePage("Articles View", tmpl, "./views/articleview.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
@@ -82,6 +85,7 @@ func ViewArticle(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
+		pge.ChangeTitle(fmt.Sprintf("View Article - %s", result.Title))
 		err = mix.Write(w, pge.Create(r, result))
 
 		if err != nil {

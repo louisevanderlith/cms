@@ -19,14 +19,16 @@
             </tr>
             </tfoot>
             <tbody>
-            {{range $key, $val := .Data.Records}}
+            {{range .Data.GetRecords.ToSlice}}
+                {{$v := .GetValue}}
+                {{$k := .GetKey}}
                 <tr>
-                    <td>{{$val.Upvotes}}</td>
-                    <td>{{$val.Downvotes}}</td>
-                    <td>{{$val.Text}}</td>
-                    <td>{{$val.CommentType}}</td>
+                    <td>{{$v.Upvotes}}</td>
+                    <td>{{$v.Downvotes}}</td>
+                    <td>{{$v.Text}}</td>
+                    <td>{{$v.CommentType}}</td>
                     <td>
-                        <a href="/comment/comments/{{$val.Key}}" class="btn btn-primary">View</a>
+                        <a href="/comments/{{$k}}" class="btn btn-primary">View</a>
                     </td>
                 </tr>
             {{end}}

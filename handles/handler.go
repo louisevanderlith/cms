@@ -26,9 +26,10 @@ func FullMenu() *menu.Menu {
 	m := menu.NewMenu()
 
 	m.AddItem(menu.NewItem("b", "/articles", "Blog", nil))
-	//m.AddItem(menu.NewItem("c", "/entities", "Entities", nil))
-	//m.AddItem(menu.NewItem("d", "/resources", "Resources", nil))
+	m.AddItem(menu.NewItem("a", "/comms", "Messages", nil))
 	m.AddItem(menu.NewItem("e", "/content", "Content Management", nil))
+	m.AddItem(menu.NewItem("f", "/heroes", "Heroes", nil))
+	m.AddItem(menu.NewItem("c", "/uploads", "Uploads & Media", nil))
 
 	return m
 }
@@ -48,7 +49,7 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 		ClientSecret: clientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  host + "/callback",
-		Scopes:       []string{oidc.ScopeOpenID, "artifact", "folio", "blog"},
+		Scopes:       []string{oidc.ScopeOpenID, "artifact", "folio", "blog-view", "blog-save"},
 	}
 
 	CredConfig = &clientcredentials.Config{
@@ -96,9 +97,18 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	r.HandleFunc("/articles/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchArticles(tmpl))).Methods(http.MethodGet)
 	r.HandleFunc("/articles/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewArticle(tmpl))).Methods(http.MethodGet)
 
+	r.HandleFunc("/comms", open.LoginMiddleware(v, GetMessages(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/comms/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchMessages(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/comms/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchMessages(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/comms/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewMessage(tmpl))).Methods(http.MethodGet)
+
+	r.HandleFunc("/uploads", open.LoginMiddleware(v, GetUploads(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/uploads/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchUploads(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/uploads/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchUploads(tmpl))).Methods(http.MethodGet)
+	r.HandleFunc("/uploads/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewUpload(tmpl))).Methods(http.MethodGet)
+
 	return r
 }
-
 
 func ThemeContentMod() mix.ModFunc {
 	return func(f mix.MixerFactory, r *http.Request) {

@@ -59,7 +59,7 @@ func SearchMessages(tmpl *template.Template) http.HandlerFunc {
 }
 
 func ViewMessage(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Messages View", tmpl, "./views/messageView.html")
+	pge := mix.PreparePage("Message View", tmpl, "./views/messageview.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
 	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))

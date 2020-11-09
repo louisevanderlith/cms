@@ -1,19 +1,19 @@
-{{template "adminpage.html" .}}
-{{define "admincontent"}}
-    <form id="frmBasicSite" role="form" data-toggle="validator">
+{{template "foliopage.html" .}}
+{{define "foliocontent"}}
+    <form id="frmMessage" role="form" data-toggle="validator">
         <div class="control-group">
             <div class="form-group floating-label-form-group controls">
-                <label for="txtTitle">Title</label>
-                <input class="form-control" type="text" id="txtTitle" placeholder="Title" required
-                       value="{{.Data.Title}}"/>
+                <label for="txtName">Subject</label>
+                <input class="form-control" type="text" id="txtName" placeholder="Name" required
+                       value="{{.Data.Name}}"/>
                 <p class="with-errors text-danger"></p>
             </div>
         </div>
         <div class="control-group">
             <div class="form-group floating-label-form-group controls">
-                <label for="txtDescription">Description</label>
-                <textarea class="form-control" id="txtDescription" placeholder="Description" required
-                          cols="40" rows="5">{{.Data.Description}}</textarea>
+                <label for="txtSubject">Subject</label>
+                <input class="form-control" type="text" id="txtSubject" placeholder="Subject" required
+                       value="{{.Data.Subject}}"/>
                 <p class="with-errors text-danger"></p>
             </div>
         </div>
@@ -21,51 +21,42 @@
             <div class="form-group floating-label-form-group controls">
                 <label for="txtEmail">Email Address</label>
                 <input class="form-control" type="email" id="txtEmail" required
-                       value="{{.Data.ContactEmail}}"/>
+                       value="{{.Data.Email}}"/>
                 <p class="with-errors text-danger"></p>
             </div>
         </div>
         <div class="control-group">
             <div class="form-group floating-label-form-group controls">
-                <label for="txtPhone">Contact Number</label>
-                <input class="form-control" type="tel" id="txtPhone" minlength="9" maxlength="10" required
-                       value="{{.Data.ContactPhone}}"/>
+                <label for="txtPhone">Phone</label>
+                <input class="form-control" type="tel" id="txtPhone" required
+                       value="{{.Data.Phone}}"/>
                 <p class="with-errors text-danger"></p>
             </div>
         </div>
         <div class="control-group">
             <div class="form-group floating-label-form-group controls">
-                <label for="txtURL">URL</label>
-                <input class="form-control" type="url" id="txtURL" required
-                       value="{{.Data.URL}}"/>
+                <label for="txtBody">Body</label>
+                <textarea class="form-control" id="txtBody" placeholder="Body" required
+                          cols="40" rows="5">{{.Data.Body}}</textarea>
                 <p class="with-errors text-danger"></p>
             </div>
         </div>
         <div class="control-group">
             <div class="form-group floating-label-form-group controls">
-                <label for="uplImage">Logo</label>
-                <div id="imageHolder">
-                    <div class="control-group">
-                        <div class="form-group floating-label-form-group controls">
-                            <label for="uplProfileImg">Icon</label>
-                            <input class="form-control" type="file" multiple="false" data-for="logo"
-                                   data-name="Profile" data-id="{{.Data.ImageKey}}"
-                                   accept=".jpg, .jpeg, .png" id="uplProfileImg"
-                                   placeholder="Profile Image" {{if not .Data.ImageKey}}
-                                required {{end}}
-                            />
-                            <input {{if not .Data.ImageKey}} hidden {{end}} type="image" id="uplProfileView"
-                                                                            class="img-thumbnail"
-                                                                            src="{{ index .Endpoints "artifact" }}/download/{{.Data.ImageKey}}"
-                                                                            alt="profile image"/>
-                            <p class="with-errors text-danger"></p>
-                        </div>
-                    </div>
-                </div>
+                <label for="txtTo">Sent To</label>
+                <input class="form-control" type="email" id="txtTo" placeholder="Sent to" required
+                       value="{{.Data.To}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtError">Error</label>
+                <input class="form-control" type="text" id="txtError" placeholder="Subject"
+                       value="{{.Data.Error}}"/>
                 <p class="with-errors text-danger"></p>
             </div>
         </div>
     </form>
-    <a class="btn btn-secondary" href="/site">Back</a>
     </div>
 {{end}}
