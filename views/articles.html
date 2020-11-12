@@ -24,6 +24,7 @@
             </tr>
             </tfoot>
             <tbody>
+                {{if .Data.Records}}
             {{range $_, $val := .Data.GetRecords.ToSlice}}
                 {{$v := $val.GetValue}}
                 {{$k := $val.GetKey}}
@@ -48,6 +49,11 @@
                         </p>
                     </td>
                 </tr>
+            {{end}}
+            {{else}}
+            <tr>
+                No Records Found
+            </tr>
             {{end}}
             </tbody>
         </table>
