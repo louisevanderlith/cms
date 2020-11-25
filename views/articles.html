@@ -24,30 +24,32 @@
             </tr>
             </tfoot>
             <tbody>
-            {{range $_, $val := .Data.GetRecords.ToSlice}}
-                {{$v := $val.GetValue}}
-                {{$k := $val.GetKey}}
-                <tr>
-                    <td>{{$v.Title}}</td>
-                    <td>{{$v.WrittenBy}}</td>
-                    <td>{{$v.Public}}</td>
-                    <td>{{$k.GetTimestamp}}</td>
-                    <td>{{$v.Category}}</td>
-                    <td>
-                        <p class="buttons">
-                            <a href="/articles/{{$k}}" class="button is-primary">
+            {{if .Data.Records}}
+                {{range $_, $val := .Data.GetRecords.ToSlice}}
+                    {{$v := $val.GetValue}}
+                    {{$k := $val.GetKey}}
+                    <tr>
+                        <td>{{$v.Title}}</td>
+                        <td>{{$v.WrittenBy}}</td>
+                        <td>{{$v.Public}}</td>
+                        <td>{{$k.GetTimestamp}}</td>
+                        <td>{{$v.Category}}</td>
+                        <td>
+                            <p class="buttons">
+                                <a href="/articles/{{$k}}" class="button is-primary">
                             <span class="icon is-small">
                                 <i class="far fa-edit"></i>
                             </span>
-                            </a>
-                            <button data-key="{{$k}}" class="button is-danger deleter">
+                                </a>
+                                <button data-key="{{$k}}" class="button is-danger deleter">
                             <span class="icon is-small">
                                 <i class="fas fa-ban"></i>
                             </span>
-                            </button>
-                        </p>
-                    </td>
-                </tr>
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
+                {{end}}
             {{end}}
             </tbody>
         </table>

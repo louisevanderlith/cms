@@ -2,6 +2,7 @@ package handles
 
 import (
 	"github.com/coreos/go-oidc"
+	"github.com/gorilla/mux"
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/menu"
 	"github.com/louisevanderlith/droxolite/mix"
@@ -13,12 +14,11 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 var (
-	CredConfig *clientcredentials.Config
+	AuthConfig *oauth2.Config
+	credConfig *clientcredentials.Config
 	Endpoints  map[string]string
 )
 
@@ -44,22 +44,22 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 
 	Endpoints = endpoints
 
-	authConfig := &oauth2.Config{
+	AuthConfig = &oauth2.Config{
 		ClientID:     clientId,
 		ClientSecret: clientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  host + "/callback",
-		Scopes:       []string{oidc.ScopeOpenID, "artifact", "folio", "blog-view", "blog-save"},
+		Scopes:       []string{oidc.ScopeOpenID, "upload-artifact", "folio", "blog-view", "blog-save"},
 	}
 
-	CredConfig = &clientcredentials.Config{
+	credConfig = &clientcredentials.Config{
 		ClientID:     clientId,
 		ClientSecret: clientSecret,
 		TokenURL:     provider.Endpoint().TokenURL,
-		Scopes:       []string{oidc.ScopeOpenID, "theme", "artifact", "folio"},
+		Scopes:       []string{oidc.ScopeOpenID, "theme", "upload-artifact", "folio"},
 	}
 
-	err = api.UpdateTemplate(CredConfig.Client(ctx), endpoints["theme"])
+	err = api.UpdateTemplate(credConfig.Client(ctx), endpoints["theme"])
 
 	if err != nil {
 		panic(err)
@@ -76,43 +76,39 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	fs := http.FileServer(distPath)
 	r.PathPrefix("/dist/").Handler(http.StripPrefix("/dist/", fs))
 
-	lock := open.NewUILock(authConfig)
+	lock := open.NewUILock(provider, AuthConfig)
+
 	r.HandleFunc("/login", lock.Login).Methods(http.MethodGet)
 	r.HandleFunc("/callback", lock.Callback).Methods(http.MethodGet)
 
-	oidcConfig := &oidc.Config{
-		ClientID: clientId,
-	}
-	v := provider.Verifier(oidcConfig)
+	r.Handle("/", lock.Middleware(Index(tmpl))).Methods(http.MethodGet)
 
-	r.HandleFunc("/", open.LoginMiddleware(v, Index(tmpl))).Methods(http.MethodGet)
+	r.Handle("/content", lock.Middleware(GetAllContent(tmpl))).Methods(http.MethodGet)
+	r.Handle("/content/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchContent(tmpl))).Methods(http.MethodGet)
+	r.Handle("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchContent(tmpl))).Methods(http.MethodGet)
+	r.Handle("/content/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewContent(tmpl))).Methods(http.MethodGet)
 
-	r.HandleFunc("/content", open.LoginMiddleware(v, GetAllContent(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchContent(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchContent(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/content/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewContent(tmpl))).Methods(http.MethodGet)
+	r.Handle("/articles", lock.Middleware(GetArticles(tmpl))).Methods(http.MethodGet)
+	r.Handle("/articles/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchArticles(tmpl))).Methods(http.MethodGet)
+	r.Handle("/articles/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchArticles(tmpl))).Methods(http.MethodGet)
+	r.Handle("/articles/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewArticle(tmpl))).Methods(http.MethodGet)
 
-	r.HandleFunc("/articles", open.LoginMiddleware(v, GetArticles(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/articles/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchArticles(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/articles/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchArticles(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/articles/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewArticle(tmpl))).Methods(http.MethodGet)
+	r.Handle("/comms", lock.Middleware(GetMessages(tmpl))).Methods(http.MethodGet)
+	r.Handle("/comms/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchMessages(tmpl))).Methods(http.MethodGet)
+	r.Handle("/comms/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchMessages(tmpl))).Methods(http.MethodGet)
+	r.Handle("/comms/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewMessage(tmpl))).Methods(http.MethodGet)
 
-	r.HandleFunc("/comms", open.LoginMiddleware(v, GetMessages(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/comms/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchMessages(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/comms/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchMessages(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/comms/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewMessage(tmpl))).Methods(http.MethodGet)
-
-	r.HandleFunc("/uploads", open.LoginMiddleware(v, GetUploads(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/uploads/{pagesize:[A-Z][0-9]+}", open.LoginMiddleware(v, SearchUploads(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/uploads/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", open.LoginMiddleware(v, SearchUploads(tmpl))).Methods(http.MethodGet)
-	r.HandleFunc("/uploads/{key:[0-9]+\\x60[0-9]+}", open.LoginMiddleware(v, ViewUpload(tmpl))).Methods(http.MethodGet)
+	r.Handle("/uploads", lock.Middleware(GetUploads(tmpl))).Methods(http.MethodGet)
+	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchUploads(tmpl))).Methods(http.MethodGet)
+	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchUploads(tmpl))).Methods(http.MethodGet)
+	r.Handle("/uploads/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewUpload(tmpl))).Methods(http.MethodGet)
 
 	return r
 }
 
 func ThemeContentMod() mix.ModFunc {
 	return func(f mix.MixerFactory, r *http.Request) {
-		clnt := CredConfig.Client(r.Context())
+		clnt := credConfig.Client(r.Context())
 
 		content, err := folio.FetchDisplay(clnt, Endpoints["folio"])
 

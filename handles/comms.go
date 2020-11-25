@@ -5,6 +5,7 @@ import (
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
 	"github.com/louisevanderlith/husk/keys"
+	"golang.org/x/oauth2"
 	"html/template"
 	"log"
 	"net/http"
@@ -14,10 +15,11 @@ func GetMessages(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Messages", tmpl, "./views/messages.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
-		clnt := CredConfig.Client(r.Context())
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
 		result, err := api.FetchLatestMessages(clnt, Endpoints["comms"], "A10")
 
 		if err != nil {
@@ -38,10 +40,11 @@ func SearchMessages(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Messages", tmpl, "./views/messages.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
-		clnt := CredConfig.Client(r.Context())
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
 		result, err := api.FetchLatestMessages(clnt, Endpoints["comms"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
@@ -62,7 +65,7 @@ func ViewMessage(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Message View", tmpl, "./views/messageview.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
@@ -73,7 +76,8 @@ func ViewMessage(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		clnt := CredConfig.Client(r.Context())
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
 		result, err := api.FetchMessage(clnt, Endpoints["comms"], key)
 
 		if err != nil {

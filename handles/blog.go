@@ -6,6 +6,7 @@ import (
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
 	"github.com/louisevanderlith/husk/keys"
+	"golang.org/x/oauth2"
 	"html/template"
 	"log"
 	"net/http"
@@ -16,10 +17,12 @@ func GetArticles(tmpl *template.Template) http.HandlerFunc {
 	pge.AddMenu(FullMenu())
 	pge.ChangeTitle("Articles")
 	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
-		clnt := CredConfig.Client(r.Context())
+		tkn := r.Context().Value("Token").(oauth2.Token)
+
+		clnt := AuthConfig.Client(r.Context(), &tkn)
 		result, err := api.FetchLatestArticles(clnt, Endpoints["blog"], "A10")
 
 		if err != nil {
@@ -41,10 +44,11 @@ func SearchArticles(tmpl *template.Template) http.HandlerFunc {
 	pge.AddMenu(FullMenu())
 	pge.ChangeTitle("Articles")
 	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
-		clnt := CredConfig.Client(r.Context())
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
 		result, err := api.FetchLatestArticles(clnt, Endpoints["blog"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
@@ -65,10 +69,11 @@ func ViewArticle(tmpl *template.Template) http.HandlerFunc {
 	pge := mix.PreparePage("Articles View", tmpl, "./views/articleview.html")
 	pge.AddMenu(FullMenu())
 	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(CredConfig.ClientID))
+	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	pge.AddModifier(ThemeContentMod())
 	return func(w http.ResponseWriter, r *http.Request) {
-		clnt := CredConfig.Client(r.Context())
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
 		if err != nil {
