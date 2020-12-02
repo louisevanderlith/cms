@@ -1,5 +1,5 @@
-{{template "foliopage.html" .}}
-{{define "foliocontent"}}
+{{template "layout.html" .}}
+{{define "mainlayout"}}
     <section class="section">
         <table class="table is-fullwidth is-hoverable" id="dataTable">
             <thead>
@@ -21,29 +21,31 @@
             </tr>
             </tfoot>
             <tbody>
-            {{range .Data.GetRecords.ToSlice}}
-                {{$v := .GetValue}}
-                {{$k := .GetKey}}
-                <tr>
-                    <td>{{$v.ItemName}}</td>
-                    <td>{{$v.Name}}</td>
-                    <td>{{$v.MimeType}}</td>
-                    <td>{{$v.Size}}</td>
-                    <td>
-                        <p class="buttons">
-                            <a href="/uploads/{{$k}}" class="button is-primary">
+            {{if .Data.Records}}
+                {{range .Data.GetRecords.ToSlice}}
+                    {{$v := .GetValue}}
+                    {{$k := .GetKey}}
+                    <tr>
+                        <td>{{$v.ItemName}}</td>
+                        <td>{{$v.Name}}</td>
+                        <td>{{$v.MimeType}}</td>
+                        <td>{{$v.Size}}</td>
+                        <td>
+                            <p class="buttons">
+                                <a href="/uploads/{{$k}}" class="button is-primary">
                             <span class="icon is-small">
                                 <i class="fas fa-file-alt"></i>
                             </span>
-                            </a>
-                            <button data-key="{{$k}}" class="button is-danger deleter">
+                                </a>
+                                <button data-key="{{$k}}" class="button is-danger deleter">
                             <span class="icon is-small">
                                 <i class="fas fa-ban"></i>
                             </span>
-                            </button>
-                        </p>
-                    </td>
-                </tr>
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
+                {{end}}
             {{end}}
             </tbody>
         </table>

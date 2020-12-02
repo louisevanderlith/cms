@@ -1,5 +1,5 @@
-{{template "foliopage.html" .}}
-{{define "foliocontent"}}
+{{template "layout.html" .}}
+{{define "mainlayout"}}
     <section class="hero is-medium has-background">
         <img alt="YumYum" class="hero-background"
              src="{{ index .Endpoints "artifact" }}/download/{{.Data.ImageKey}}"/>

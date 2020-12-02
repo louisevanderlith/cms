@@ -1,5 +1,5 @@
-{{template "foliopage.html" .}}
-{{define "foliocontent"}}
+{{template "layout.html" .}}
+{{define "mainlayout"}}
     <section class="section">
         <table class="table is-fullwidth is-hoverable" id="dataTable">
             <thead>
@@ -19,23 +19,25 @@
             </tr>
             </tfoot>
             <tbody>
-            {{range .Data.GetRecords.ToSlice}}
-                {{$v := .GetValue}}
-                {{$k := .GetKey}}
-                <tr>
-                    <td>{{$v.Name}}</td>
-                    <td>{{$v.Email}}</td>
-                    <td>{{$v.Sent}}</td>
-                    <td>
-                        <p class="buttons">
-                            <a href="/comms/{{$k}}" class="button is-primary">
+            {{if .Data.Records}}
+                {{range .Data.GetRecords.ToSlice}}
+                    {{$v := .GetValue}}
+                    {{$k := .GetKey}}
+                    <tr>
+                        <td>{{$v.Name}}</td>
+                        <td>{{$v.Email}}</td>
+                        <td>{{$v.Sent}}</td>
+                        <td>
+                            <p class="buttons">
+                                <a href="/comms/{{$k}}" class="button is-primary">
                             <span class="icon is-small">
                                 <i class="far fa-edit"></i>
                             </span>
-                            </a>
-                        </p>
-                    </td>
-                </tr>
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+                {{end}}
             {{end}}
             </tbody>
         </table>
