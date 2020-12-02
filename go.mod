@@ -7,8 +7,8 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/louisevanderlith/artifact v1.0.0
 	github.com/louisevanderlith/blog v1.0.2
-	github.com/louisevanderlith/comms v1.0.0
-	github.com/louisevanderlith/droxolite v1.19.1
+	github.com/louisevanderlith/comms v1.0.4
+	github.com/louisevanderlith/droxolite v1.19.3
 	github.com/louisevanderlith/folio v1.0.9
 	github.com/louisevanderlith/game v1.0.0
 	github.com/louisevanderlith/husk v1.7.6
