@@ -6,17 +6,11 @@ import (
 	"github.com/louisevanderlith/folio/api"
 	"github.com/louisevanderlith/husk/keys"
 	"golang.org/x/oauth2"
-	"html/template"
 	"log"
 	"net/http"
 )
 
-func GetAllContent(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Content", tmpl, "./views/content.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func GetAllContent(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tknVal := r.Context().Value("Token")
 		if tknVal == nil {
@@ -27,7 +21,7 @@ func GetAllContent(tmpl *template.Template) http.HandlerFunc {
 		accToken := tknVal.(oauth2.Token)
 
 		clnt := AuthConfig.Client(r.Context(), &accToken)
-		result, err := api.FetchAllContent(clnt, Endpoints["folio"], "A10")
+		data, err := api.FetchAllContent(clnt, Endpoints["folio"], "A10")
 
 		if err != nil {
 			log.Println("Fetch All Content Error", err)
@@ -35,7 +29,7 @@ func GetAllContent(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Content", "./views/content.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -43,16 +37,11 @@ func GetAllContent(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func SearchContent(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Content", tmpl, "./views/content.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func SearchContent(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchAllContent(clnt, Endpoints["folio"], drx.FindParam(r, "pagesize"))
+		data, err := api.FetchAllContent(clnt, Endpoints["folio"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
 			log.Println("Fetch All Content Error", err)
@@ -60,7 +49,7 @@ func SearchContent(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Content", "./views/content.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -68,14 +57,8 @@ func SearchContent(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func ViewContent(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Content View", tmpl, "./views/contentview.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func ViewContent(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
 		if err != nil {
@@ -86,7 +69,7 @@ func ViewContent(tmpl *template.Template) http.HandlerFunc {
 
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchContent(clnt, Endpoints["folio"], key)
+		data, err := api.FetchContent(clnt, Endpoints["folio"], key)
 
 		if err != nil {
 			log.Println("Fetch Content Error", err)
@@ -94,7 +77,7 @@ func ViewContent(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Content View", "./views/contentview.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

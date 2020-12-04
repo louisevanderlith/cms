@@ -6,21 +6,15 @@ import (
 	"github.com/louisevanderlith/droxolite/mix"
 	"github.com/louisevanderlith/husk/keys"
 	"golang.org/x/oauth2"
-	"html/template"
 	"log"
 	"net/http"
 )
 
-func GetUploads(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Uploads", tmpl, "./views/uploads.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func GetUploads(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchAllUploads(clnt, Endpoints["artifact"], "A10")
+		data, err := api.FetchAllUploads(clnt, Endpoints["artifact"], "A10")
 
 		if err != nil {
 			log.Println("Fetch Error", err)
@@ -28,7 +22,7 @@ func GetUploads(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Uploads", "./views/uploads.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -36,16 +30,11 @@ func GetUploads(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func SearchUploads(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Uploads", tmpl, "./views/uploads.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func SearchUploads(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchAllUploads(clnt, Endpoints["artifact"], drx.FindParam(r, "pagesize"))
+		data, err := api.FetchAllUploads(clnt, Endpoints["artifact"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
 			log.Println(err)
@@ -53,7 +42,7 @@ func SearchUploads(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Uploads", "./views/uploads.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -61,12 +50,7 @@ func SearchUploads(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func ViewUpload(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Uploads View", tmpl, "./views/uploadview.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func ViewUpload(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
@@ -79,7 +63,7 @@ func ViewUpload(tmpl *template.Template) http.HandlerFunc {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
 
-		result, err := api.FetchUpload(clnt, Endpoints["artifact"], key)
+		data, err := api.FetchUpload(clnt, Endpoints["artifact"], key)
 
 		if err != nil {
 			log.Println(err)
@@ -87,7 +71,7 @@ func ViewUpload(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Uploads View", "./views/uploadview.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

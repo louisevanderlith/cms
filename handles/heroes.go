@@ -6,21 +6,15 @@ import (
 	"github.com/louisevanderlith/game/api"
 	"github.com/louisevanderlith/husk/keys"
 	"golang.org/x/oauth2"
-	"html/template"
 	"log"
 	"net/http"
 )
 
-func GetHeroes(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Heroes", tmpl, "./views/game/heroes.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func GetHeroes(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchAllHeroes(clnt, Endpoints["game"], "A10")
+		data, err := api.FetchAllHeroes(clnt, Endpoints["game"], "A10")
 
 		if err != nil {
 			log.Println(err)
@@ -28,7 +22,7 @@ func GetHeroes(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Heroes", "./views/game/heroes.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println(err)
@@ -36,16 +30,11 @@ func GetHeroes(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func SearchHeroes(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Heroes", tmpl, "./views/game/heroes.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func SearchHeroes(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchAllHeroes(clnt, Endpoints["game"], drx.FindParam(r, "pagesize"))
+		data, err := api.FetchAllHeroes(clnt, Endpoints["game"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
 			log.Println(err)
@@ -53,7 +42,7 @@ func SearchHeroes(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Heroes", "./views/game/heroes.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println(err)
@@ -61,12 +50,7 @@ func SearchHeroes(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func ViewHero(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Hero View", tmpl, "./views/heroview.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func ViewHero(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
@@ -79,7 +63,7 @@ func ViewHero(tmpl *template.Template) http.HandlerFunc {
 
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchHero(clnt, Endpoints["game"], key)
+		data, err := api.FetchHero(clnt, Endpoints["game"], key)
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -87,7 +71,7 @@ func ViewHero(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Hero View", "./views/heroview.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

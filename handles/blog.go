@@ -1,29 +1,21 @@
 package handles
 
 import (
-	"fmt"
 	"github.com/louisevanderlith/blog/api"
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
 	"github.com/louisevanderlith/husk/keys"
 	"golang.org/x/oauth2"
-	"html/template"
 	"log"
 	"net/http"
 )
 
-func GetArticles(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Articles", tmpl, "./views/articles.html")
-	pge.AddMenu(FullMenu())
-	pge.ChangeTitle("Articles")
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func GetArticles(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchLatestArticles(clnt, Endpoints["blog"], "A10")
+		data, err := api.FetchLatestArticles(clnt, Endpoints["blog"], "A10")
 
 		if err != nil {
 			log.Println("Fetch Articles Error", err)
@@ -31,7 +23,7 @@ func GetArticles(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Articles", "./views/articles.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -39,17 +31,11 @@ func GetArticles(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func SearchArticles(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Articles", tmpl, "./views/articles.html")
-	pge.AddMenu(FullMenu())
-	pge.ChangeTitle("Articles")
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func SearchArticles(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchLatestArticles(clnt, Endpoints["blog"], drx.FindParam(r, "pagesize"))
+		data, err := api.FetchLatestArticles(clnt, Endpoints["blog"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
 			log.Println("Fetch Articles Error", err)
@@ -57,7 +43,7 @@ func SearchArticles(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Articles", "./views/articles.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -65,12 +51,7 @@ func SearchArticles(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func ViewArticle(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Articles View", tmpl, "./views/articleview.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func ViewArticle(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
@@ -82,7 +63,7 @@ func ViewArticle(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		result, err := api.FetchArticle(clnt, Endpoints["blog"], key)
+		data, err := api.FetchArticle(clnt, Endpoints["blog"], key)
 
 		if err != nil {
 			log.Println("Fetch Article Error", err)
@@ -90,8 +71,8 @@ func ViewArticle(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		pge.ChangeTitle(fmt.Sprintf("View Article - %s", result.Title))
-		err = mix.Write(w, pge.Create(r, result))
+		//fac.ChangeTitle(fmt.Sprintf("View Article - %s", result.Title))
+		err = mix.Write(w, fact.Create(r, "Article View", "./views/articleview.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

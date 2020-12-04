@@ -3,17 +3,11 @@ package handles
 import (
 	"github.com/coreos/go-oidc"
 	"github.com/louisevanderlith/droxolite/mix"
-	"html/template"
 	"log"
 	"net/http"
 )
 
-func Index(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Index", tmpl, "./views/index.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func Index(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tknVal := r.Context().Value("IDToken")
 		if tknVal == nil {
@@ -30,7 +24,7 @@ func Index(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, claims))
+		err = mix.Write(w, fact.Create(r, "Index", "./views/index.html",  mix.NewDataBag(claims)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

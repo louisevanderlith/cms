@@ -81,33 +81,39 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	r.HandleFunc("/login", lock.Login).Methods(http.MethodGet)
 	r.HandleFunc("/callback", lock.Callback).Methods(http.MethodGet)
 
-	r.Handle("/", lock.Middleware(Index(tmpl))).Methods(http.MethodGet)
+	fact := mix.NewPageFactory(tmpl)
+	fact.AddMenu(FullMenu())
+	fact.AddModifier(mix.EndpointMod(Endpoints))
+	fact.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
+	fact.AddModifier(ThemeContentMod())
 
-	r.Handle("/content", lock.Middleware(GetAllContent(tmpl))).Methods(http.MethodGet)
-	r.Handle("/content/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchContent(tmpl))).Methods(http.MethodGet)
-	r.Handle("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchContent(tmpl))).Methods(http.MethodGet)
-	r.Handle("/content/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewContent(tmpl))).Methods(http.MethodGet)
+	r.Handle("/", lock.Middleware(Index(fact))).Methods(http.MethodGet)
 
-	r.Handle("/articles", lock.Middleware(GetArticles(tmpl))).Methods(http.MethodGet)
-	r.Handle("/articles/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchArticles(tmpl))).Methods(http.MethodGet)
-	r.Handle("/articles/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchArticles(tmpl))).Methods(http.MethodGet)
-	r.Handle("/articles/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewArticle(tmpl))).Methods(http.MethodGet)
+	r.Handle("/content", lock.Middleware(GetAllContent(fact))).Methods(http.MethodGet)
+	r.Handle("/content/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchContent(fact))).Methods(http.MethodGet)
+	r.Handle("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchContent(fact))).Methods(http.MethodGet)
+	r.Handle("/content/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewContent(fact))).Methods(http.MethodGet)
 
-	r.Handle("/comms", lock.Middleware(GetMessages(tmpl))).Methods(http.MethodGet)
-	r.Handle("/comms/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchMessages(tmpl))).Methods(http.MethodGet)
-	r.Handle("/comms/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchMessages(tmpl))).Methods(http.MethodGet)
-	r.Handle("/comms/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewMessage(tmpl))).Methods(http.MethodGet)
+	r.Handle("/articles", lock.Middleware(GetArticles(fact))).Methods(http.MethodGet)
+	r.Handle("/articles/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchArticles(fact))).Methods(http.MethodGet)
+	r.Handle("/articles/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchArticles(fact))).Methods(http.MethodGet)
+	r.Handle("/articles/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewArticle(fact))).Methods(http.MethodGet)
 
-	r.Handle("/uploads", lock.Middleware(GetUploads(tmpl))).Methods(http.MethodGet)
-	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchUploads(tmpl))).Methods(http.MethodGet)
-	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchUploads(tmpl))).Methods(http.MethodGet)
-	r.Handle("/uploads/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewUpload(tmpl))).Methods(http.MethodGet)
+	r.Handle("/comms", lock.Middleware(GetMessages(fact))).Methods(http.MethodGet)
+	r.Handle("/comms/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchMessages(fact))).Methods(http.MethodGet)
+	r.Handle("/comms/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchMessages(fact))).Methods(http.MethodGet)
+	r.Handle("/comms/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewMessage(fact))).Methods(http.MethodGet)
+
+	r.Handle("/uploads", lock.Middleware(GetUploads(fact))).Methods(http.MethodGet)
+	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchUploads(fact))).Methods(http.MethodGet)
+	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchUploads(fact))).Methods(http.MethodGet)
+	r.Handle("/uploads/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewUpload(fact))).Methods(http.MethodGet)
 
 	return r
 }
 
 func ThemeContentMod() mix.ModFunc {
-	return func(f mix.MixerFactory, r *http.Request) {
+	return func(b mix.Bag, r *http.Request) {
 		clnt := credConfig.Client(r.Context())
 
 		content, err := folio.FetchDisplay(clnt, Endpoints["folio"])
@@ -118,6 +124,6 @@ func ThemeContentMod() mix.ModFunc {
 			return
 		}
 
-		f.SetValue("Folio", content)
+		b.SetValue("Folio", content)
 	}
 }

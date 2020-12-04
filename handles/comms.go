@@ -6,21 +6,15 @@ import (
 	"github.com/louisevanderlith/droxolite/mix"
 	"github.com/louisevanderlith/husk/keys"
 	"golang.org/x/oauth2"
-	"html/template"
 	"log"
 	"net/http"
 )
 
-func GetMessages(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Messages", tmpl, "./views/messages.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func GetMessages(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchLatestMessages(clnt, Endpoints["comms"], "A10")
+		data, err := api.FetchLatestMessages(clnt, Endpoints["comms"], "A10")
 
 		if err != nil {
 			log.Println("Fetch Error", err)
@@ -28,7 +22,7 @@ func GetMessages(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Messages", "./views/messages.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -36,16 +30,11 @@ func GetMessages(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func SearchMessages(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Messages", tmpl, "./views/messages.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func SearchMessages(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchLatestMessages(clnt, Endpoints["comms"], drx.FindParam(r, "pagesize"))
+		data, err := api.FetchLatestMessages(clnt, Endpoints["comms"], drx.FindParam(r, "pagesize"))
 
 		if err != nil {
 			log.Println("Fetch Error", err)
@@ -53,7 +42,7 @@ func SearchMessages(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Messages", "./views/messages.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)
@@ -61,12 +50,7 @@ func SearchMessages(tmpl *template.Template) http.HandlerFunc {
 	}
 }
 
-func ViewMessage(tmpl *template.Template) http.HandlerFunc {
-	pge := mix.PreparePage("Message View", tmpl, "./views/messageview.html")
-	pge.AddMenu(FullMenu())
-	pge.AddModifier(mix.EndpointMod(Endpoints))
-	pge.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
-	pge.AddModifier(ThemeContentMod())
+func ViewMessage(fact mix.MixerFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
@@ -78,7 +62,7 @@ func ViewMessage(tmpl *template.Template) http.HandlerFunc {
 
 		tkn := r.Context().Value("Token").(oauth2.Token)
 		clnt := AuthConfig.Client(r.Context(), &tkn)
-		result, err := api.FetchMessage(clnt, Endpoints["comms"], key)
+		data, err := api.FetchMessage(clnt, Endpoints["comms"], key)
 
 		if err != nil {
 			log.Println(err)
@@ -86,7 +70,7 @@ func ViewMessage(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, pge.Create(r, result))
+		err = mix.Write(w, fact.Create(r, "Message View", "./views/messageview.html", mix.NewDataBag(data)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

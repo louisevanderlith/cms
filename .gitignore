@@ -21,6 +21,10 @@ db/*.husk
 
 .idea
 .packages
-.dart_tool
 
+#Dart
 .DS_Store
+.dart_tool
+build
+pubspec.lock
+.packages
