@@ -18,7 +18,7 @@
     <div class="field">
         <label class="label">Blocks</label>
         <button type="button" id="btnAddBlock" class="button is-info is-small">Add</button>
-        <div class="control">
+        <div class="control" id="lstBlocks">
             {{range $key, $val := .Data.Info.Blocks}}
                 <div class="card">
                     <header class="card-header">

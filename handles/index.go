@@ -24,7 +24,7 @@ func Index(fact mix.MixerFactory) http.HandlerFunc {
 			return
 		}
 
-		err = mix.Write(w, fact.Create(r, "Index", "./views/index.html",  mix.NewDataBag(claims)))
+		err = mix.Write(w, fact.Create(r, "Index", "./views/index.html", mix.NewDataBag(claims)))
 
 		if err != nil {
 			log.Println("Serve Error", err)

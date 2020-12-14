@@ -49,7 +49,7 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 		ClientSecret: clientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  host + "/callback",
-		Scopes:       []string{oidc.ScopeOpenID, "upload-artifact", "folio", "blog-view", "blog-save"},
+		Scopes:       []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "upload-artifact", "folio", "blog-view", "blog-save"},
 	}
 
 	credConfig = &clientcredentials.Config{
@@ -76,10 +76,12 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	fs := http.FileServer(distPath)
 	r.PathPrefix("/dist/").Handler(http.StripPrefix("/dist/", fs))
 
-	lock := open.NewUILock(provider, AuthConfig)
+	lock := open.NewHybridLock(provider, credConfig, AuthConfig)
 
 	r.HandleFunc("/login", lock.Login).Methods(http.MethodGet)
 	r.HandleFunc("/callback", lock.Callback).Methods(http.MethodGet)
+	r.HandleFunc("/logout", lock.Logout).Methods(http.MethodGet)
+	r.HandleFunc("/refresh", lock.Refresh).Methods(http.MethodGet)
 
 	fact := mix.NewPageFactory(tmpl)
 	fact.AddMenu(FullMenu())
@@ -87,27 +89,39 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	fact.AddModifier(mix.IdentityMod(AuthConfig.ClientID))
 	fact.AddModifier(ThemeContentMod())
 
-	r.Handle("/", lock.Middleware(Index(fact))).Methods(http.MethodGet)
+	r.Handle("/", lock.Protect(lock.Lock(Index(fact)))).Methods(http.MethodGet)
 
-	r.Handle("/content", lock.Middleware(GetAllContent(fact))).Methods(http.MethodGet)
-	r.Handle("/content/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchContent(fact))).Methods(http.MethodGet)
-	r.Handle("/content/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchContent(fact))).Methods(http.MethodGet)
-	r.Handle("/content/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewContent(fact))).Methods(http.MethodGet)
+	rcontent := r.PathPrefix("/content").Subrouter()
+	rcontent.Handle("", GetAllContent(fact)).Methods(http.MethodGet)
+	rcontent.Handle("/{pagesize:[A-Z][0-9]+}", SearchContent(fact)).Methods(http.MethodGet)
+	rcontent.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchContent(fact)).Methods(http.MethodGet)
+	rcontent.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewContent(fact)).Methods(http.MethodGet)
+	rcontent.Use(lock.Protect)
+	rcontent.Use(lock.Lock)
 
-	r.Handle("/articles", lock.Middleware(GetArticles(fact))).Methods(http.MethodGet)
-	r.Handle("/articles/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchArticles(fact))).Methods(http.MethodGet)
-	r.Handle("/articles/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchArticles(fact))).Methods(http.MethodGet)
-	r.Handle("/articles/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewArticle(fact))).Methods(http.MethodGet)
+	rarticle := r.PathPrefix("/articles").Subrouter()
+	rarticle.Handle("/", GetArticles(fact)).Methods(http.MethodGet)
+	rarticle.Handle("/{pagesize:[A-Z][0-9]+}", SearchArticles(fact)).Methods(http.MethodGet)
+	rarticle.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchArticles(fact)).Methods(http.MethodGet)
+	rarticle.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewArticle(fact)).Methods(http.MethodGet)
+	rarticle.Use(lock.Protect)
+	rarticle.Use(lock.Lock)
 
-	r.Handle("/comms", lock.Middleware(GetMessages(fact))).Methods(http.MethodGet)
-	r.Handle("/comms/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchMessages(fact))).Methods(http.MethodGet)
-	r.Handle("/comms/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchMessages(fact))).Methods(http.MethodGet)
-	r.Handle("/comms/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewMessage(fact))).Methods(http.MethodGet)
+	rcomms := r.PathPrefix("/comms").Subrouter()
+	rcomms.Handle("/", GetMessages(fact)).Methods(http.MethodGet)
+	rcomms.Handle("/{pagesize:[A-Z][0-9]+}", SearchMessages(fact)).Methods(http.MethodGet)
+	rcomms.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchMessages(fact)).Methods(http.MethodGet)
+	rcomms.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewMessage(fact)).Methods(http.MethodGet)
+	rcomms.Use(lock.Protect)
+	rcomms.Use(lock.Lock)
 
-	r.Handle("/uploads", lock.Middleware(GetUploads(fact))).Methods(http.MethodGet)
-	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}", lock.Middleware(SearchUploads(fact))).Methods(http.MethodGet)
-	r.Handle("/uploads/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", lock.Middleware(SearchUploads(fact))).Methods(http.MethodGet)
-	r.Handle("/uploads/{key:[0-9]+\\x60[0-9]+}", lock.Middleware(ViewUpload(fact))).Methods(http.MethodGet)
+	rupload := r.PathPrefix("/uploads").Subrouter()
+	rupload.Handle("/", GetUploads(fact)).Methods(http.MethodGet)
+	rupload.Handle("/{pagesize:[A-Z][0-9]+}", SearchUploads(fact)).Methods(http.MethodGet)
+	rupload.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchUploads(fact)).Methods(http.MethodGet)
+	rupload.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewUpload(fact)).Methods(http.MethodGet)
+	rupload.Use(lock.Protect)
+	rupload.Use(lock.Lock)
 
 	return r
 }
