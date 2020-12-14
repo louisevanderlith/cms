@@ -100,7 +100,7 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	rcontent.Use(lock.Lock)
 
 	rarticle := r.PathPrefix("/articles").Subrouter()
-	rarticle.Handle("/", GetArticles(fact)).Methods(http.MethodGet)
+	rarticle.Handle("", GetArticles(fact)).Methods(http.MethodGet)
 	rarticle.Handle("/{pagesize:[A-Z][0-9]+}", SearchArticles(fact)).Methods(http.MethodGet)
 	rarticle.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchArticles(fact)).Methods(http.MethodGet)
 	rarticle.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewArticle(fact)).Methods(http.MethodGet)
@@ -108,7 +108,7 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	rarticle.Use(lock.Lock)
 
 	rcomms := r.PathPrefix("/comms").Subrouter()
-	rcomms.Handle("/", GetMessages(fact)).Methods(http.MethodGet)
+	rcomms.Handle("", GetMessages(fact)).Methods(http.MethodGet)
 	rcomms.Handle("/{pagesize:[A-Z][0-9]+}", SearchMessages(fact)).Methods(http.MethodGet)
 	rcomms.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchMessages(fact)).Methods(http.MethodGet)
 	rcomms.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewMessage(fact)).Methods(http.MethodGet)
@@ -116,7 +116,7 @@ func SetupRoutes(host, clientId, clientSecret string, endpoints map[string]strin
 	rcomms.Use(lock.Lock)
 
 	rupload := r.PathPrefix("/uploads").Subrouter()
-	rupload.Handle("/", GetUploads(fact)).Methods(http.MethodGet)
+	rupload.Handle("", GetUploads(fact)).Methods(http.MethodGet)
 	rupload.Handle("/{pagesize:[A-Z][0-9]+}", SearchUploads(fact)).Methods(http.MethodGet)
 	rupload.Handle("/{pagesize:[A-Z][0-9]+}/{hash:[a-zA-Z0-9]+={0,2}}", SearchUploads(fact)).Methods(http.MethodGet)
 	rupload.Handle("/{key:[0-9]+\\x60[0-9]+}", ViewUpload(fact)).Methods(http.MethodGet)
