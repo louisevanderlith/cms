@@ -1,0 +1,61 @@
+<div id="dvContentInfo" class="content cc">
+    <div class="field">
+        <label class="label" for="txtInfoHeader">Heading</label>
+        <div class="control">
+            <input class="input" type="text" id="txtInfoHeader" placeholder="Header" required
+                   value="{{.Data.Info.Heading}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="txtContentInfoText">Text</label>
+        <div class="control">
+            <input class="input" type="text" id="txtContentInfoText" placeholder="Language" required
+                   value="{{.Data.Info.Text}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">Blocks</label>
+        <button type="button" id="btnAddBlock" class="button is-info is-small">Add</button>
+        <div class="control" id="lstBlocks">
+            {{range $key, $val := .Data.Info.Blocks}}
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {{$val.Text}}
+                        </p>
+                        <a class="card-header-icon" aria-label="more options">
+                    <span class="icon">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                        </a>
+                    </header>
+                    <div class="card-content" hidden>
+                        <div class="content">
+                            <div class="field">
+                                <label class="label" for="txtContentIcon{{$key}}">Icon</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="txtContentIcon{{$key}}" required
+                                           value="{{$val.Icon}}"/>
+                                    <p class="help is-danger"></p>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="txtContentText{{$key}}">Text</label>
+                                <div class="control">
+                                    <input class="input" type="text" id="txtContentText{{$key}}" required
+                                           value="{{$val.Text}}"/>
+                                    <p class="help is-danger"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" data-id="{{$key}}" class="card-footer-item Delete">Delete</a>
+                        </footer>
+                    </div>
+                </div>
+            {{end}}
+        </div>
+    </div>
+</div>

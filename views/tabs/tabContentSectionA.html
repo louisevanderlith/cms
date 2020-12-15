@@ -1,0 +1,53 @@
+<div id="dvContentSectionA" class="content cc">
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtSectionAHeader">Header</label>
+            <input class="input" type="text" id="txtSectionAHeader" placeholder="Profile" required
+                   value="{{.Data.SectionA.Heading}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtSectionAText">Content</label>
+            <textarea id="txtSectionAText" class="textarea" maxlength="512" required
+                      placeholder="Content">{{.Data.SectionA.Text}}</textarea>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtSectionAImageURL">Image URL</label>
+            <input class="input" type="text" id="txtSectionAImageURL" placeholder="Image URL"
+                   value="{{.Data.SectionA.ImageUrl}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="uplSectionAImg">Image</label>
+        <div class="control">
+            <div class="file">
+                <label class="file-label">
+                    <input class="file-input" type="file" multiple="false" data-for="ad" data-name="Banner"
+                           data-id="{{.Data.SectionA.ImageKey}}" accept=".jpg, .jpeg, .png"
+                           id="uplSectionAImg"
+                           placeholder="Banner Image" {{if eq (print .Data.SectionA.ImageKey) "0`0" }} required {{end}} />
+                    <p class="help is-danger"></p>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Choose an image.
+                        </span>
+                    </span>
+                </label>
+            </div>
+            <input type="image" id="uplSectionAView"
+                   class='image {{if eq (print .Data.SectionA.ImageKey) "0`0"}} is-hidden {{end}}'
+                   src="{{ index .Endpoints "artifact" }}/download/{{.Data.SectionA.ImageKey}}"
+                   alt="profile image"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+</div>

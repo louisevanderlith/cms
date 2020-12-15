@@ -1,0 +1,72 @@
+<div id="dvContentBanner" class="content cc">
+    <div class="field">
+        <label class="label" for="uplBannerBackgroundImg">Background</label>
+        <div class="control">
+            <div class="file">
+                <label class="file-label">
+                    <input class="file-input" type="file" multiple="false" data-for="banner" data-name="Banner"
+                           data-id="{{.Data.Banner.Background}}" accept=".jpg, .jpeg, .png"
+                           id="uplBannerBackgroundImg"
+                           placeholder="Banner Image" {{if eq (print .Data.Banner.Background) "0`0" }} required {{end}} />
+                    <p class="help is-danger"></p>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Choose an image.
+                        </span>
+                    </span>
+                </label>
+            </div>
+            <input type="image" id="uplBannerBackgroundView"
+                   class='image {{if eq (print .Data.Banner.Background) "0`0"}} is-hidden {{end}}'
+                   src="{{ index .Endpoints "artifact" }}/download/{{.Data.Banner.Background}}"
+                   alt="profile image"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="uplBannerImg">Image</label>
+        <div class="control">
+            <div class="file">
+                <label class="file-label">
+                    <input class="file-input" type="file" multiple="false" data-for="logo" data-name="Banner"
+                           data-id="{{.Data.Banner.Image}}" accept=".jpg, .jpeg, .png"
+                           id="uplBannerImg"
+                           placeholder="Banner Image" {{if eq (print .Data.Banner.Image) "0`0" }} required {{end}} />
+                    <p class="help is-danger"></p>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Choose an image.
+                        </span>
+                    </span>
+                </label>
+            </div>
+            <input type="image" id="uplBannerView"
+                   class='image {{if eq (print .Data.Banner.Image) "0`0"}} is-hidden {{end}}'
+                   src="{{ index .Endpoints "artifact" }}/download/{{.Data.Banner.Image}}"
+                   alt="profile image"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtBannerHeading">Heading</label>
+            <input class="input" type="text" id="txtBannerHeading" placeholder="Heading" required
+                   value="{{.Data.Banner.Heading}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <label class="label" for="txtBannerSubtitle">Subtitle</label>
+            <input class="input" type="text" id="txtBannerSubtitle" placeholder="Subtitle" required
+                   value="{{.Data.Banner.Subtitle}}"/>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+</div>

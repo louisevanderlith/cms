@@ -1,0 +1,46 @@
+{{template "layout.html" .}}
+{{define "mainlayout"}}
+    <section class="section">
+        <table class="table is-fullwidth is-hoverable" id="dataTable">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Sent</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Sent</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {{if .Data.Records}}
+                {{range .Data.GetRecords.ToSlice}}
+                    {{$v := .GetValue}}
+                    {{$k := .GetKey}}
+                    <tr>
+                        <td>{{$v.Name}}</td>
+                        <td>{{$v.Email}}</td>
+                        <td>{{$v.Sent}}</td>
+                        <td>
+                            <p class="buttons">
+                                <a href="/comms/{{$k}}" class="button is-primary">
+                            <span class="icon is-small">
+                                <i class="far fa-edit"></i>
+                            </span>
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+                {{end}}
+            {{end}}
+            </tbody>
+        </table>
+        {{template "pager.html" .Data}}
+    </section>
+{{end}}

@@ -1,0 +1,54 @@
+{{template "layout.html" .}}
+{{define "mainlayout"}}
+    <section class="section">
+        <table class="table is-fullwidth is-hoverable" id="dataTable">
+            <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Name</th>
+                <th>MimeType</th>
+                <th>Size</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>Item Name</th>
+                <th>Name</th>
+                <th>MimeType</th>
+                <th>Size</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {{if .Data.Records}}
+                {{range .Data.GetRecords.ToSlice}}
+                    {{$v := .GetValue}}
+                    {{$k := .GetKey}}
+                    <tr>
+                        <td>{{$v.ItemName}}</td>
+                        <td>{{$v.Name}}</td>
+                        <td>{{$v.MimeType}}</td>
+                        <td>{{$v.Size}}</td>
+                        <td>
+                            <p class="buttons">
+                                <a href="/uploads/{{$k}}" class="button is-primary">
+                            <span class="icon is-small">
+                                <i class="fas fa-file-alt"></i>
+                            </span>
+                                </a>
+                                <button data-key="{{$k}}" class="button is-danger deleter">
+                            <span class="icon is-small">
+                                <i class="fas fa-ban"></i>
+                            </span>
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
+                {{end}}
+            {{end}}
+            </tbody>
+        </table>
+        {{template "pager.html" .Data}}
+    </section>
+{{end}}

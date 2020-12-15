@@ -1,0 +1,125 @@
+<div class="content">
+    <div class="field">
+        <label class="label" for="txtTitle">Title</label>
+        <div class="control">
+            <input class="input" type="text" id="txtTitle" placeholder="Title" required
+                value="{{.Data.Profile.Title}}" />
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="txtDescription">Description</label>
+        <div class="control">
+            <textarea class="textarea" id="txtDescription" placeholder="Description" required cols="40"
+                rows="5">{{.Data.Profile.Description}}</textarea>
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="uplProfileImg">Logo</label>
+        <div class="control">
+            <div class="file">
+                <label class="file-label">
+                    <input class="file-input" type="file" multiple="false" data-for="logo" data-name="Profile"
+                        data-id="{{.Data.Profile.ImageKey}}" accept=".jpg, .jpeg, .png" id="uplProfileImg"
+                        placeholder="Profile Image" {{if eq (print .Data.Profile.ImageKey) "0`0" }} required {{end}} />
+                    <p class="help is-danger"></p>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Choose an image.
+                        </span>
+                    </span>
+                </label>
+            </div>
+            <input type="image" id="uplProfileView"
+                class='image {{if eq (print .Data.Profile.ImageKey) "0`0"}} is-hidden {{end}}'
+                src="{{ index .Endpoints "artifact" }}/download/{{.Data.Profile.ImageKey}}"
+                alt="profile image" />
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="lstCodes">Codes</label>
+        <button type="button" class="button is-info is-small has-text-right" id="btnAddCode">Add</button>
+        <div class="control">
+            {{range $i, $v := .Data.Profile.Codes}}
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        {{$v.Key}}
+                    </p>
+                    <a class="card-header-icon" aria-label="more options">
+                        <span class="icon">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </header>
+                <div class="card-content" hidden>
+                    <div class="content">
+                        <div class="field">
+                            <div class="control">
+                                <div class="content" id="lstCodes">
+                                    <input class="input" type="text" id="txtCodeName{{$i}}" placeholder="Title" required
+                                        value="{{$v.Key}}" />
+                                    <p class="help is-danger"></p>
+                                    <hr />
+                                    <input class="input" type="text" id="txtCodeValue{{$i}}" placeholder="Title"
+                                        required value="{{$v.Value}}" />
+                                    <p class="help is-danger"></p>
+                                </div>
+                                <p class="help is-danger"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#{{$i}}" class="card-footer-item">Delete</a>
+                </footer>
+            </div>
+            {{end}}
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="lstTerms">Terms</label>
+        <button type="button" class="button is-info is-small has-text-right" id="btnAddTerms">Add</button>
+        <div class="control" id="lstTerms">
+            {{range $i, $v := .Data.Profile.Terms}}
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        {{$v.Key}}
+                    </p>
+                    <a class="card-header-icon" aria-label="more options">
+                        <span class="icon">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </header>
+                <div class="card-content" hidden>
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" type="text" id="txtTermName{{$i}}" placeholder="Name of Term" required
+                                value="{{$v.Key}}" />
+                            <p class="help is-danger"></p>
+                            <input class="input" type="text" id="txtTermValue{{$i}}"
+                                placeholder="https://terms.com/terms.html" required value="{{$v.Value}}" />
+                            <p class="help is-danger"></p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#{{$i}}" class="card-footer-item">Delete</a>
+                </footer>
+            </div>
+            {{end}}
+            <p class="help is-danger"></p>
+        </div>
+    </div>
+</div>

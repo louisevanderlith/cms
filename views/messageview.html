@@ -1,0 +1,61 @@
+{{template "layout.html" .}}
+{{define "mainlayout"}}
+    <form id="frmMessage" role="form" data-toggle="validator">
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtName">Subject</label>
+                <input class="form-control" type="text" id="txtName" placeholder="Name" required
+                       value="{{.Data.Name}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtSubject">Subject</label>
+                <input class="form-control" type="text" id="txtSubject" placeholder="Subject" required
+                       value="{{.Data.Subject}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtEmail">Email Address</label>
+                <input class="form-control" type="email" id="txtEmail" required
+                       value="{{.Data.Email}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtPhone">Phone</label>
+                <input class="form-control" type="tel" id="txtPhone" required
+                       value="{{.Data.Phone}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtBody">Body</label>
+                <textarea class="form-control" id="txtBody" placeholder="Body" required
+                          cols="40" rows="5">{{.Data.Body}}</textarea>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtTo">Sent To</label>
+                <input class="form-control" type="email" id="txtTo" placeholder="Sent to" required
+                       value="{{.Data.To}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+                <label for="txtError">Error</label>
+                <input class="form-control" type="text" id="txtError" placeholder="Subject"
+                       value="{{.Data.Error}}"/>
+                <p class="with-errors text-danger"></p>
+            </div>
+        </div>
+    </form>
+{{end}}

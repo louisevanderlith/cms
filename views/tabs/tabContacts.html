@@ -1,0 +1,45 @@
+<div id="dvContacts" class="content">
+    {{range $key, $val := .Data.Contacts}}
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title">
+                    {{$val.Name}}
+                </p>
+                <a class="card-header-icon" aria-label="more options">
+                <span class="icon">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+                </a>
+            </header>
+            <div class="card-content" hidden>
+                <div class="content">
+                    <div class="field">
+                        <label class="label" for="txtContactIcon{{$key}}">Icon</label>
+                        <div class="control">
+                            <input class="input" type="text" id="txtContactIcon{{$key}}" required
+                                   value="{{$val.Icon}}"/>
+                            <p class="help is-danger"></p>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <label class="label" for="txtContactName{{$key}}">Name</label>
+                            <input class="input" type="text" min-length="3" id="txtContactName{{$key}}" required
+                                   value="{{$val.Name}}"/>
+                            <p class="help is-danger"></p>
+                        </div>
+                        <div class="control">
+                            <label class="label" for="txtContactValue{{$key}}">Value</label>
+                            <input class="input" type="text" min-length="3" id="txtContactValue{{$key}}" required
+                                   value="{{$val.Value}}"/>
+                            <p class="help is-danger"></p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item Delete">Delete</a>
+                </footer>
+            </div>
+        </div>
+    {{end}}
+</div>

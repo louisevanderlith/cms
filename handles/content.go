@@ -1,146 +1,86 @@
 package handles
 
 import (
-	"github.com/louisevanderlith/cms/core"
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
-	"github.com/louisevanderlith/husk"
+	"github.com/louisevanderlith/folio/api"
+	"github.com/louisevanderlith/husk/keys"
+	"golang.org/x/oauth2"
 	"log"
 	"net/http"
 )
 
-func GetContent(w http.ResponseWriter, r *http.Request) {
-	results, err := core.GetAllContent(1, 10)
+func GetAllContent(fact mix.MixerFactory) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tknVal := r.Context().Value("Token")
+		if tknVal == nil {
+			http.Error(w, "", http.StatusUnauthorized)
+			return
+		}
 
-	if err != nil {
-		log.Println("Get Content Error", err)
-		http.Error(w, "", http.StatusNotFound)
-		return
-	}
+		accToken := tknVal.(oauth2.Token)
 
-	err = mix.Write(w, mix.JSON(results))
+		clnt := AuthConfig.Client(r.Context(), &accToken)
+		data, err := api.FetchAllContent(clnt, Endpoints["folio"], "A10")
 
-	if err != nil {
-		log.Println("Serve Error", err)
-	}
-}
+		if err != nil {
+			log.Println("Fetch All Content Error", err)
+			http.Error(w, "", http.StatusUnauthorized)
+			return
+		}
 
-func DisplayContent(w http.ResponseWriter, r *http.Request) {
-	ti := drx.GetIdentity(r)
-	prf := ti.GetProfile()
+		err = mix.Write(w, fact.Create(r, "Content", "./views/content.html", mix.NewDataBag(data)))
 
-	log.Println("CMS:", prf)
-	rec, err := core.GetDisplay(prf)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "", http.StatusNotFound)
-		return
-	}
-
-	err = mix.Write(w, mix.JSON(rec.Data()))
-
-	if err != nil {
-		log.Println("Serve Error", err)
+		if err != nil {
+			log.Println("Serve Error", err)
+		}
 	}
 }
 
-func ViewContent(w http.ResponseWriter, r *http.Request) {
-	k := drx.FindParam(r, "key")
-	key, err := husk.ParseKey(k)
+func SearchContent(fact mix.MixerFactory) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
+		data, err := api.FetchAllContent(clnt, Endpoints["folio"], drx.FindParam(r, "pagesize"))
 
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "", http.StatusBadRequest)
-		return
-	}
+		if err != nil {
+			log.Println("Fetch All Content Error", err)
+			http.Error(w, "", http.StatusUnauthorized)
+			return
+		}
 
-	rec, err := core.GetContent(key)
+		err = mix.Write(w, fact.Create(r, "Content", "./views/content.html", mix.NewDataBag(data)))
 
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "", http.StatusNotFound)
-		return
-	}
-
-	err = mix.Write(w, mix.JSON(rec))
-
-	if err != nil {
-		log.Println("Serve Error", err)
+		if err != nil {
+			log.Println("Serve Error", err)
+		}
 	}
 }
 
-func SearchContent(w http.ResponseWriter, r *http.Request) {
-	page, size := drx.GetPageData(r)
-	results, err := core.GetAllContent(page, size)
+func ViewContent(fact mix.MixerFactory) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "", http.StatusNotFound)
-		return
-	}
+		if err != nil {
+			log.Println("Parse Error", err)
+			http.Error(w, "", http.StatusBadRequest)
+			return
+		}
 
-	err = mix.Write(w, mix.JSON(results))
+		tkn := r.Context().Value("Token").(oauth2.Token)
+		clnt := AuthConfig.Client(r.Context(), &tkn)
+		data, err := api.FetchContent(clnt, Endpoints["folio"], key)
 
-	if err != nil {
-		log.Println("Serve Error", err)
-	}
-}
+		if err != nil {
+			log.Println("Fetch Content Error", err)
+			http.Error(w, "", http.StatusUnauthorized)
+			return
+		}
 
-func CreateContent(w http.ResponseWriter, r *http.Request) {
-	var obj core.Content
-	err := drx.JSONBody(r, &obj)
+		err = mix.Write(w, fact.Create(r, "Content View", "./views/contentview.html", mix.NewDataBag(data)))
 
-	if err != nil {
-		log.Println("Bind Error", err)
-		http.Error(w, "", http.StatusBadRequest)
-		return
-	}
-
-	rec, err := obj.Create()
-
-	if err != nil {
-		log.Println("Create Error", err)
-		http.Error(w, "", http.StatusInternalServerError)
-		return
-	}
-
-	err = mix.Write(w, mix.JSON(rec))
-
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func UpdateContent(w http.ResponseWriter, r *http.Request) {
-	key, err := husk.ParseKey(drx.FindParam(r, "key"))
-
-	if err != nil {
-		log.Println("Parse Error", err)
-		http.Error(w, "", http.StatusBadRequest)
-		return
-	}
-
-	body := &core.Content{}
-	err = drx.JSONBody(r, body)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "", http.StatusBadRequest)
-		return
-	}
-
-	err = body.Update(key)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "", http.StatusNotFound)
-		return
-	}
-
-	err = mix.Write(w, mix.JSON(nil))
-
-	if err != nil {
-		log.Println("Serve Error", err)
+		if err != nil {
+			log.Println("Serve Error", err)
+		}
 	}
 }

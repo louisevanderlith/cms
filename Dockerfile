@@ -1,24 +1,11 @@
-FROM golang:1.13 as build_base
+FROM alpine:3.12.0
 
-WORKDIR /box
+COPY cms .
+COPY build/*.dart.js dist/js/
+COPY views views
 
-COPY go.mod .
-COPY go.sum .
+RUN mkdir -p /views/_shared
 
-RUN go mod download
-
-FROM build_base as builder
-
-COPY main.go .
-COPY handles ./handles
-COPY core ./core
-
-RUN CGO_ENABLED="0" go build
-
-FROM scratch
-
-COPY --from=builder /box/cms .
-
-EXPOSE 8090
+EXPOSE 8107
 
 ENTRYPOINT [ "./cms" ]
